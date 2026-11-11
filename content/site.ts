@@ -894,7 +894,7 @@ chapters: [
     //   time:     shown above the title; TIMES.* come from QUICK SETUP, others are typed in, e.g. "4:00 PM"
     //   location: text shown under the title; {ceremony} / {reception} are replaced
     //             with ceremony.location / reception.location ("" to hide)
-    //   image:    line-art illustration from /public/weddingtimeline; "" to use the icon instead
+    //   image:    line-art illustration from /public/weddingTimeline; "" to use the icon instead
     //   icon:     fallback icon when there is no image —
     //             "arrival" | "guests" | "rings" | "departure" | "cocktail" | "fireworks" | "dance"
     //   description: not shown on the site (kept only as a note)
@@ -906,7 +906,7 @@ chapters: [
         title: "Bride's Solo & Team Bride",
         description: "Photo & video of the bride and her team.",
         location: "{ceremony}",
-        image: "/weddingtimeline/arrival.png",
+        image: "/weddingTimeline/arrival.png",
         icon: "arrival" as TimelineIconName,
       },
       {
@@ -915,7 +915,7 @@ chapters: [
         title: "Bride Family Portraits",
         description: "Photo & video with the bride's family.",
         location: "{ceremony}",
-        image: "/weddingtimeline/PhotoSession.png",
+        image: "/weddingTimeline/PhotoSession.png",
         icon: "rings" as TimelineIconName,
       },
       {
@@ -924,7 +924,7 @@ chapters: [
         title: "First Touch & Prayer",
         description: "The couple settles, prays and rests (optional, no first look).",
         location: "{ceremony}",
-        image: "/weddingtimeline/WeddingCeremony.png",
+        image: "/weddingTimeline/WeddingCeremony.png",
         icon: "rings" as TimelineIconName,
       },
       // Guest-facing schedule
@@ -934,7 +934,7 @@ chapters: [
         title: "Guest Arrival",
         description: "Our coordinators will welcome you and help you find your seat.",
         location: "{ceremony}",
-        image: "/weddingtimeline/Elegant Wedding Guests Arrive Sign.png",
+        image: "/weddingTimeline/Elegant Wedding Guests Arrive Sign.png",
         icon: "guests" as TimelineIconName,
       },
       {
@@ -943,7 +943,7 @@ chapters: [
         title: "Entourage Line-Up",
         description: "The entourage lines up for the processional.",
         location: "{ceremony}",
-        image: "/weddingtimeline/Wedding Entourage Call Time Logo.png",
+        image: "/weddingTimeline/Wedding Entourage Call Time Logo.png",
         icon: "arrival" as TimelineIconName,
       },
       {
@@ -952,7 +952,7 @@ chapters: [
         title: "Entourage Call",
         description: "The processional begins.",
         location: "{ceremony}",
-        image: "/weddingtimeline/assemble.png",
+        image: "/weddingTimeline/assemble.png",
         icon: "rings" as TimelineIconName,
       },
       {
@@ -961,7 +961,7 @@ chapters: [
         title: "Wedding Ceremony",
         description: "We exchange our vows before God, family and friends.",
         location: "{ceremony}",
-        image: "/weddingtimeline/WeddingCeremony.png",
+        image: "/weddingTimeline/WeddingCeremony.png",
         icon: "rings" as TimelineIconName,
       },
       {
@@ -970,7 +970,7 @@ chapters: [
         title: "Pictorials & Recessional",
         description: "Join us for photos with the newlyweds.",
         location: "{ceremony}",
-        image: "/weddingtimeline/PhotoSession.png",
+        image: "/weddingTimeline/PhotoSession.png",
         icon: "rings" as TimelineIconName,
       },
       {
@@ -979,7 +979,7 @@ chapters: [
         title: "Grazing Table, Photo Booth & Coffee Cart",
         description: "Enjoy the grazing table, photo booth, coffee cart and tattoo station.",
         location: "{reception}",
-        image: "/weddingtimeline/CockTailHour.png",
+        image: "/weddingTimeline/CockTailHour.png",
         icon: "cocktail" as TimelineIconName,
       },
       {
@@ -988,7 +988,7 @@ chapters: [
         title: "Couple's Retouch",
         description: "",
         location: "{reception}",
-        image: "/weddingtimeline/arrival.png",
+        image: "/weddingTimeline/arrival.png",
         icon: "arrival" as TimelineIconName,
       },
       {
@@ -997,7 +997,7 @@ chapters: [
         title: "Pre-Program",
         description: "Our host warms up the evening.",
         location: "{reception}",
-        image: "/weddingtimeline/reception welcom.png",
+        image: "/weddingTimeline/reception welcom.png",
         icon: "fireworks" as TimelineIconName,
       },
       {
@@ -1006,7 +1006,7 @@ chapters: [
         title: "Reception Program & Dinner",
         description: "Dinner is served as the program begins.",
         location: "{reception}",
-        image: "/weddingtimeline/DinnerService.png",
+        image: "/weddingTimeline/DinnerService.png",
         icon: "cocktail" as TimelineIconName,
       },
       {
@@ -1015,7 +1015,7 @@ chapters: [
         title: "End of Program",
         description: "Thank you for celebrating with us!",
         location: "{reception}",
-        image: "/weddingtimeline/SendOff.png",
+        image: "/weddingTimeline/SendOff.png",
         icon: "departure" as TimelineIconName,
       },
     ],
