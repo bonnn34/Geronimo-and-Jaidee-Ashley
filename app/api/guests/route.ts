@@ -1,0 +1,245 @@
+import { siteConfig } from "@/content/site"
+import { type NextRequest, NextResponse } from "next/server"
+import {
+  fetchGoogleScriptJson,
+  invalidateSheetsCache,
+  listResponseHeaders,
+  postGoogleScriptJson,
+  SHEETS_CACHE_KEYS,
+  withSheetsCache,
+} from "@/lib/sheets-cache"
+
+// ⚠️ IMPORTANT: Replace this with your NEW Google Apps Script deployment URL
+// This should be the URL from deploying google-apps-script/guest-management.js
+const GOOGLE_SCRIPT_URL = siteConfig.googleAPI.guestList
+
+// New Guest interface matching the improved system
+export interface Guest {
+  id: string | number  // Support both UUID strings and numeric IDs
+  name: string
+  role: string
+  email?: string
+  contact?: string
+  message?: string
+  allowedGuests: number
+  companions: { name: string; relationship: string }[]
+  tableNumber: string
+  isVip: boolean
+  status: 'pending' | 'confirmed' | 'declined' | 'request'
+  addedBy?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+// Legacy interface for backward compatibility
+export interface LegacyGuest {
+  Name: string
+  Email: string
+  RSVP: string
+  Guest: string
+  Message: string
+}
+
+const VALID_GUEST_STATUSES = new Set<Guest["status"]>([
+  "pending",
+  "confirmed",
+  "declined",
+  "request",
+])
+
+function text(value: unknown): string {
+  return typeof value === "string" ? value.trim() : ""
+}
+
+function normalizeGuest(guest: Record<string, unknown>): Guest | null {
+  // Some older guest sheets used `Name`; unrelated sheet rows (for example,
+  // principal sponsors) have neither field and must not reach the dashboard.
+  const name = text(guest.name) || text(guest.Name)
+  if (!name) return null
+
+  const parsedAllowedGuests = Number.parseInt(String(guest.allowedGuests ?? ""), 10)
+  const rawStatus = text(guest.status).toLowerCase()
+  const status = VALID_GUEST_STATUSES.has(rawStatus as Guest["status"])
+    ? (rawStatus as Guest["status"])
+    : "pending"
+  const companions = Array.isArray(guest.companions)
+    ? guest.companions.map((companion) => {
+        const row = companion && typeof companion === "object"
+          ? companion as Record<string, unknown>
+          : {}
+        return {
+          name: text(row.name),
+          relationship: text(row.relationship),
+        }
+      })
+    : []
+
+  return {
+    id: text(guest.id) || name,
+    name,
+    role: text(guest.role) || "Guest",
+    email: text(guest.email),
+    contact: text(guest.contact),
+    message: text(guest.message),
+    allowedGuests: Number.isFinite(parsedAllowedGuests) && parsedAllowedGuests > 0
+      ? parsedAllowedGuests
+      : 1,
+    companions,
+    tableNumber: text(guest.tableNumber),
+    isVip: guest.isVip === true || String(guest.isVip).toUpperCase() === "TRUE",
+    status,
+    addedBy: text(guest.addedBy),
+    createdAt: text(guest.createdAt) || undefined,
+    updatedAt: text(guest.updatedAt) || undefined,
+  }
+}
+
+// GET: Fetch all guests from Google Sheets
+export async function GET() {
+  try {
+    const normalizedData = await withSheetsCache(SHEETS_CACHE_KEYS.guests, async () => {
+      const data = await fetchGoogleScriptJson(GOOGLE_SCRIPT_URL)
+
+      if (data && typeof data === "object" && "error" in data && (data as { error?: string }).error) {
+        throw new Error((data as { error: string }).error)
+      }
+
+      return Array.isArray(data)
+        ? data
+            .map((guest) =>
+              guest && typeof guest === "object"
+                ? normalizeGuest(guest as Record<string, unknown>)
+                : null
+            )
+            .filter((guest): guest is Guest => guest !== null)
+        : []
+    })
+
+    return NextResponse.json(normalizedData, { status: 200, headers: listResponseHeaders })
+  } catch (error) {
+    console.error('Error fetching guests:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch guests' },
+      { status: 500 }
+    )
+  }
+}
+
+// POST: Add a new guest
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+
+    // Validation - Only Full Name and Attendance/RSVP Status are required
+    if (!body.name || typeof body.name !== 'string' || body.name.trim() === '') {
+      return NextResponse.json(
+        { error: 'Full Name is required' },
+        { status: 400 }
+      )
+    }
+
+    if (!body.status || typeof body.status !== 'string') {
+      return NextResponse.json(
+        { error: 'Attendance/RSVP Status is required' },
+        { status: 400 }
+      )
+    }
+
+    // Validate status is one of the allowed values
+    const validStatuses = ['pending', 'confirmed', 'declined', 'request'];
+    if (!validStatuses.includes(body.status)) {
+      return NextResponse.json(
+        { error: 'Invalid RSVP status. Must be one of: pending, confirmed, declined, request' },
+        { status: 400 }
+      )
+    }
+
+    const guestData = {
+      action: 'create',
+      name: body.name.trim(),
+      role: body.role?.trim() || 'Guest', // Optional - defaults to 'Guest'
+      email: body.email?.trim() || '',
+      contact: body.contact?.trim() || '',
+      message: body.message?.trim() || '',
+      allowedGuests: parseInt(body.allowedGuests) || 1,
+      companions: body.companions || [],
+      tableNumber: body.tableNumber?.trim() || '',
+      isVip: body.isVip === true,
+      status: body.status, // Required field
+      addedBy: body.addedBy?.trim() || '',
+    }
+
+    const data = await postGoogleScriptJson(GOOGLE_SCRIPT_URL, guestData)
+
+    invalidateSheetsCache(SHEETS_CACHE_KEYS.guests)
+    return NextResponse.json(data ?? { success: true }, { status: 201 })
+  } catch (error) {
+    console.error('Error adding guest:', error)
+    return NextResponse.json(
+      { error: 'Failed to add guest' },
+      { status: 500 }
+    )
+  }
+}
+
+// PUT: Update an existing guest
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json()
+
+    const guestId = body.id == null ? "" : String(body.id).trim()
+    if (!guestId) {
+      return NextResponse.json(
+        { error: 'Guest ID is required' },
+        { status: 400 }
+      )
+    }
+
+    const updateData = {
+      action: 'update',
+      ...body,
+      id: guestId,
+    }
+
+    const data = await postGoogleScriptJson(GOOGLE_SCRIPT_URL, updateData)
+
+    invalidateSheetsCache(SHEETS_CACHE_KEYS.guests)
+    return NextResponse.json(data ?? { success: true }, { status: 200 })
+  } catch (error: any) {
+    console.error('Error updating guest:', error)
+    return NextResponse.json(
+      { error: error?.message || 'Failed to update guest' },
+      { status: 500 }
+    )
+  }
+}
+
+// DELETE: Delete a guest
+export async function DELETE(request: NextRequest) {
+  try {
+    const body = await request.json()
+
+    const guestId = body.id == null ? "" : String(body.id).trim()
+    if (!guestId) {
+      return NextResponse.json(
+        { error: 'Guest ID is required' },
+        { status: 400 }
+      )
+    }
+
+    const data = await postGoogleScriptJson(GOOGLE_SCRIPT_URL, {
+      action: 'delete',
+      id: guestId,
+    })
+
+    invalidateSheetsCache(SHEETS_CACHE_KEYS.guests)
+    return NextResponse.json(data ?? { success: true }, { status: 200 })
+  } catch (error) {
+    console.error('Error deleting guest:', error)
+    return NextResponse.json(
+      { error: 'Failed to delete guest' },
+      { status: 500 }
+    )
+  }
+}
+

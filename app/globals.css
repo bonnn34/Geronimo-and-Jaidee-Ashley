@@ -1,0 +1,1678 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@font-face {
+  font-family: 'SortsMillGoudy';
+  src: url('/fonts/sorts-mill-goudy-master/OFLGoudyStMTT.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SortsMillGoudy';
+  src: url('/fonts/sorts-mill-goudy-master/OFLGoudyStMTT-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'HelloParisSans';
+  src: url('/fonts/hello-paris-sans-regular/hello-paris-sans-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Brightwall';
+  src: url('/fonts/Brightwall%20Dafont.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Beautiful Malera';
+  src: url('../Font/Beautiful-Malera-Demo-BF6a36e658b295b.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('../Font/Fontspring-DEMO-theseasons-reg.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Above the Beyond';
+  src: url('../Font/above-the-beyond-script.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "CoupleAnastasia";
+  src:
+    url("/fonts/AnastasiaScript.ttf") format("truetype"),
+    url("/fonts/AnastasiaScript Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+
+:root {
+  --background: #D9A08C;
+  --foreground: #44413C;
+  --card: #FFF8F2;
+  --card-foreground: #44413C;
+  --popover: #FFF8F2;
+  --popover-foreground: #44413C;
+  /* Primary: midnight navy */
+  --primary: #9B6554;
+  --primary-foreground: #FFF8F2;
+  /* Secondary: slate navy */
+  --secondary: #F1C8B8;
+  --secondary-foreground: #44413C;
+  /* Legacy sage token mapped to blush peach */
+  --sage: #D9A08C;
+  /* Muted / light surfaces: blush peach */
+  --muted: #D9A08C;
+  --muted-foreground: #44413C;
+  /* Accent: warm peach */
+  --accent: #F1C8B8;
+  --accent-foreground: #44413C;
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: #C5BDB5;
+  --input: #C5BDB5;
+  --ring: #9B6554;
+  --chart-1: #B97865;
+  --chart-2: #D9A08C;
+  --chart-3: #B97865;
+  --chart-4: #D9A08C;
+  --chart-5: #FFF8F2;
+  --radius: 0.625rem;
+  --sidebar: #FFF8F2;
+  --sidebar-foreground: #44413C;
+  --sidebar-primary: #9B6554;
+  --sidebar-primary-foreground: #FFF8F2;
+  --sidebar-accent: #D9A08C;
+  --sidebar-accent-foreground: #44413C;
+  --sidebar-border: #C5BDB5;
+  --sidebar-ring: #9B6554;
+
+  /* Keep the uploaded floral PNG colors intact. */
+  --deco-filter: none;
+
+  /* QR codes: dark navy on white for scannability. */
+  --color-qr-fg: #44413C;
+  --color-qr-bg: #FFFFFF;
+}
+
+.dark {
+  --background: #44413C;
+  --foreground: #FFF8F2;
+  --card: color-mix(in srgb, #44413C 87%, #D9A08C);
+  --card-foreground: #FFF8F2;
+  --popover: color-mix(in srgb, #44413C 87%, #D9A08C);
+  --popover-foreground: #FFF8F2;
+  --primary: #B97865;
+  --primary-foreground: #44413C;
+  --secondary: #44413C;
+  --secondary-foreground: #FFFFFF;
+  /* Legacy sage token */
+  --sage: #D9A08C;
+  --muted: color-mix(in srgb, #44413C 85%, #D9A08C);
+  --muted-foreground: #FFF8F2;
+  --accent: #D9A08C;
+  --accent-foreground: #44413C;
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: #C5BDB5;
+  --input: #C5BDB5;
+  --ring: #B97865;
+  --chart-1: #B97865;
+  --chart-2: #44413C;
+  --chart-3: #D9A08C;
+  --chart-4: #FFF8F2;
+  --chart-5: #44413C;
+  --sidebar: color-mix(in srgb, #44413C 92%, black);
+  --sidebar-foreground: #FFF8F2;
+  --sidebar-primary: #B97865;
+  --sidebar-primary-foreground: #44413C;
+  --sidebar-accent: #44413C;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #C5BDB5;
+  --sidebar-ring: #B97865;
+}
+
+@theme inline {
+  --font-sans: "Inter", "Inter Fallback";
+  /* Updated serif font to Great Vibes */
+  --font-serif: "Great Vibes", "Great Vibes Fallback";
+
+  /* ==========================================
+     MOTIF COLORS
+     Palette: navy #44413C (all text); peaches #B97865 (deep — accents, lines,
+     florals), #D9A08C (mid — soft surfaces, envelope paper), #F1C8B8 (light —
+     washes, tints); ivory #FFF8F2; silk backdrop #D9A08C (invitation-page.tsx).
+     #44413C is a slightly softer navy for secondary text only.
+     Legacy token names are retained for existing components.
+     ========================================== */
+
+  /* ------------------------------------------
+     Background / Linen
+     ------------------------------------------ */
+
+  --color-motif-cream: #FFF8F2; /* warm ivory */
+  --color-motif-yellow: #B97865; /* warm peach */
+  --color-motif-soft: #FFF8F2; /* warm ivory paper */
+
+  /* ------------------------------------------
+     Royal Romance Accents
+     ------------------------------------------ */
+
+  --color-motif-accent: #44413C; /* slate navy, also used for text */
+  --color-motif-deep: #44413C; /* midnight navy */
+  --color-motif-medium: #B97865; /* warm peach */
+
+  /* ------------------------------------------
+     Royal Navy and Gold Accents
+     ------------------------------------------ */
+
+  --color-motif-teal: #44413C; /* royal navy */
+  --color-motif-teal-medium: #44413C; /* slate navy */
+  --color-motif-teal-light: #D9A08C; /* blush peach */
+
+  /* ------------------------------------------
+     Romantic Floral Accent
+     ------------------------------------------ */
+
+  --color-motif-blush: #D9A08C; /* blush peach */
+
+  /* ------------------------------------------
+     Neutral / Paper
+     ------------------------------------------ */
+
+  --color-motif-silver: #C5BDB5; /* warm peach */
+
+  /* ==========================================
+     WELCOME SECTION
+     ========================================== */
+
+  /* Main background */
+  --color-welcome-bg: #D9A08C;
+
+  /* Soft background */
+  --color-welcome-bg-soft:
+    color-mix(in srgb, #D9A08C 12%, #FFF8F2);
+
+  /* ==========================================
+     TYPOGRAPHY
+     ========================================== */
+
+  /* Main body text */
+  --color-welcome-text: #44413C;
+
+  /* Secondary / softer text */
+  --color-welcome-text-soft:
+    color-mix(in srgb, #44413C 70%, #FFF8F2);
+
+  /* Small headings */
+  --color-welcome-heading: #44413C;
+
+  /* Script / romantic accent */
+  --color-welcome-script: #44413C;
+
+  /* Main hero heading */
+  --color-welcome-navy: #44413C;
+
+  /* ==========================================
+     BUTTONS / DECORATION
+     ========================================== */
+
+  /* Buttons */
+  --color-welcome-green: #9B6554;
+
+  /* Royal ornaments / floral lines */
+  --color-welcome-botanical: #B97865;
+
+  /* Gold decorative details */
+  --color-welcome-gold: #B97865;
+
+  /* Floral accents */
+  --color-welcome-blush: #D9A08C;
+
+  /* ==========================================
+     ADDITIONAL ROYAL ROMANCE COLORS
+     ========================================== */
+
+  --color-coastal-deep: #44413C;
+  --color-coastal-teal: #44413C;
+  --color-coastal-soft: #D9A08C;
+  --color-coastal-light: #FFF8F2;
+
+  --color-romantic-coral: #44413C;
+  --color-romantic-deep: #44413C;
+  --color-romantic-peach: #D9A08C;
+  --color-romantic-blush: #D9A08C;
+
+  --color-coastal-sand: #B97865;
+  --color-coastal-ivory: #FFF8F2;
+
+  /* ==========================================
+     COUPLE NAME MASK / LOCKUP
+     ========================================== */
+
+  /* Main name color */
+  --couple-name-fill: #44413C;
+
+  /* Dusty Pink + Gold accents */
+  --couple-name-fill-mid: #44413C;
+  --couple-name-fill-accent: #9B6554;
+  --couple-name-fill-soft: var(--color-motif-soft);
+
+  /* ==========================================
+     BACKGROUND - CIRCLE PATTERN
+     ========================================== */
+
+  /* Light ivory background */
+  --color-bg-pattern-base:
+    #D9A08C;
+
+  /* Main circles */
+  --color-bg-circle-deep:
+    color-mix(in srgb, #B97865 10%, transparent);
+
+  --color-bg-circle-mid:
+    color-mix(in srgb, #F1C8B8 28%, transparent);
+
+  --color-bg-circle-light:
+    color-mix(in srgb, #FFF8F2 72%, transparent);
+
+  /* Accent circles */
+  --color-bg-circle-accent-1:
+    color-mix(in srgb, #B97865 17%, transparent);
+
+  --color-bg-circle-accent-2:
+    color-mix(in srgb, #FFF8F2 58%, transparent);
+
+  --color-bg-circle-accent-3:
+    color-mix(in srgb, #D9A08C 45%, transparent);
+
+  /* Warm and romantic touches */
+  --color-bg-circle-rose:
+    color-mix(in srgb, #D9A08C 35%, transparent);
+
+  --color-bg-circle-peach:
+    color-mix(in srgb, #B97865 9%, transparent);
+
+  /* Text and divider lines */
+  --color-on-pattern: var(--color-welcome-navy);
+  --color-on-pattern-soft: var(--color-motif-accent);
+
+  --color-on-pattern-glow:
+    color-mix(in srgb, white 70%, transparent);
+
+  --color-on-pattern-line: #B97865;
+
+  /* ==========================================
+     HERO COUNTDOWN
+     ========================================== */
+
+  /* Bottom fade */
+  --color-countdown-fade: #44413C;
+
+  /* Numbers + heading */
+  --color-countdown-text: var(--color-motif-soft);
+
+  /* Unit labels */
+  --color-countdown-label: #B97865;
+
+  /* ==========================================
+     ENVELOPE - ROYAL NAVY + GOLD
+     ========================================== */
+
+  /* Main envelope paper */
+  --color-envelope-paper: #D9A08C;
+
+  /* Back panel / inside */
+  --color-envelope-base:
+    color-mix(in srgb, #D9A08C 92%, #B97865);
+
+  /* Gold-tinted highlights */
+  --color-envelope-highlight:
+    #F1C8B8;
+
+  /* Flap folds */
+  --color-envelope-fold:
+    color-mix(in srgb, #D9A08C 88%, #B97865);
+
+  /* Shadows */
+  --color-envelope-shadow:
+    color-mix(in srgb, #D9A08C 65%, #9B6554);
+
+  /* Champagne Gold crease lines */
+  --color-envelope-crease: rgb(185 120 101 / 45%);
+
+  /* ==========================================
+     OPTIONAL SEMANTIC COLORS
+     ========================================== */
+
+  /* Primary CTA */
+  --color-primary: #9B6554;
+
+  /* Primary CTA hover */
+  --color-primary-hover:
+    #875547;
+
+  /* Romantic CTA */
+  --color-romantic: #9B6554;
+
+  /* Romantic hover */
+  --color-romantic-hover:
+    #875547;
+
+  /* Soft highlight */
+  --color-highlight: #D9A08C;
+
+  /* Highlight - Save the Date, couple names, day number */
+  --color-highlight-deep: #44413C;
+
+  /* Decorations - corner leaves, ornaments */
+  --color-deco: #B97865;
+
+  /* ==========================================
+     INVITATION DESIGN SYSTEM
+     ========================================== */
+
+  /* Strong text */
+  --invite-ink: var(--color-ink-deep);
+
+  /* Display lettering and couple names */
+  --invite-title: var(--color-ink-accent);
+
+  /* Script and joining words */
+  --invite-script: var(--color-highlight-deep);
+
+  /* Small accents */
+  --invite-accent: var(--color-welcome-heading);
+
+  /* Paragraph text */
+  --invite-body: var(--color-welcome-text);
+
+  /* Paper surfaces */
+  --invite-paper: var(--color-motif-soft);
+
+  --invite-paper-tint:
+    color-mix(in srgb, #D9A08C 12%, var(--color-motif-soft));
+
+  /* Hairlines and gold frames */
+  --invite-line:
+    color-mix(in srgb, #B97865 60%, transparent);
+
+  --invite-line-soft:
+    color-mix(in srgb, #B97865 28%, transparent);
+
+  /* Buttons */
+  --invite-button: #9B6554;
+  --invite-button-text: var(--color-motif-soft);
+
+  /* Depth */
+  --invite-overlay:
+    color-mix(in srgb, var(--color-ink-deep) 45%, transparent);
+
+  --invite-shadow:
+    color-mix(in srgb, var(--color-ink-deep) 35%, transparent);
+
+  --invite-glow:
+    color-mix(in srgb, white 70%, transparent);
+
+  /* Page background */
+  --invite-page-bg: var(--color-welcome-bg);
+
+  /* Section accent */
+  --color-section-accent: #B97865;
+
+  /* Light section */
+  --color-section-light: #D9A08C;
+
+  /* Card background */
+  --color-card: #FFF8F2;
+
+  /* Border */
+  --color-border: #B97865;
+
+  /* Dark text */
+  --color-text-dark: #44413C;
+
+  /* Deepest ink */
+  --color-ink-deep: #44413C;
+
+  /* Deep accent ink */
+  --color-ink-accent: #44413C;
+
+  /* Muted text */
+  --color-text-muted: #745E58;
+
+  /* ==========================================
+     DASHBOARD
+     ========================================== */
+
+  /* Buttons, active states, icons */
+  --color-dash-primary: var(--color-primary);
+  --color-dash-primary-hover: var(--color-primary-hover);
+
+  /* Secondary accent */
+  --color-dash-accent: var(--color-section-accent);
+
+  /* Text */
+  --color-dash-ink: var(--color-text-dark);
+
+  --color-dash-ink-strong:
+    color-mix(in srgb, var(--color-text-dark) 80%, black);
+
+  --color-dash-text:
+    color-mix(in srgb, var(--color-text-dark) 80%, white);
+
+  --color-dash-muted: var(--color-text-muted);
+
+  --color-dash-faint: #745E58;
+
+  /* Lines + borders */
+  --color-dash-line: var(--color-section-light);
+
+  --color-dash-focus: #44413C;
+
+  --color-dash-border:
+    color-mix(in srgb, var(--color-section-light) 50%, white);
+
+  /* Surfaces */
+  --color-dash-tint:
+    color-mix(in srgb, var(--color-section-light) 26%, white);
+
+  --color-dash-surface:
+    color-mix(in srgb, var(--color-section-light) 12%, white);
+
+  --color-dash-bg:
+    color-mix(in srgb, var(--color-motif-cream) 60%, white);
+
+  --color-dash-bg-deep: var(--color-motif-cream);
+
+  /* Small badges */
+  --color-dash-badge-bg:
+    color-mix(in srgb, var(--color-romantic-blush) 55%, white);
+
+  --color-dash-badge-text:
+    color-mix(in srgb, var(--color-romantic-deep) 55%, black);
+
+  /* Delete / danger */
+  --color-dash-danger: #A83A58;
+
+  --color-dash-danger-text: #A83A58;
+
+  --color-dash-danger-soft:
+    color-mix(in srgb, var(--color-romantic-blush) 35%, white);
+
+  --color-dash-danger-softer:
+    color-mix(in srgb, var(--color-romantic-blush) 18%, white);
+
+  --color-dash-danger-border:
+    color-mix(in srgb, var(--color-romantic-blush) 60%, white);
+
+  /* ==========================================
+     CUSTOM FONTS
+     ========================================== */
+
+  --font-imperial-script: "Imperial Script", cursive;
+  --font-anastasia-script: "CoupleAnastasia";
+  --font-beautiful-malera: "Beautiful Malera", cursive;
+  --font-the-seasons: "The Seasons", serif;
+  --font-above-beyond: "Above the Beyond", cursive;
+
+  /* ==========================================
+     TAILWIND THEME MAPPINGS
+     ========================================== */
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* Legacy sage compatibility */
+  --color-sage: var(--sage);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply text-foreground;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Safety net: no element (corner florals, carousels, rising hearts…) can make
+   the page scroll sideways on phones. `clip` (not `hidden`) keeps position: sticky
+   working and doesn't create a new scroll container. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* iPhone Safari zooms in when a form field with text under 16px is tapped, and the
+   page then pans left/right until the guest pinches back out. Every invitation form
+   field (messages, RSVP) was 13px, so on phones they are 16px. The dashboard keeps its
+   compact fields (it sets maximum-scale=1 itself, see app/dashboard/layout.tsx). */
+@media (max-width: 767px) {
+  body:not(:has(.dashboard-root)) input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  body:not(:has(.dashboard-root)) textarea,
+  body:not(:has(.dashboard-root)) select {
+    font-size: 16px;
+  }
+}
+
+/* Imperial Script font utility class */
+.imperial-script-regular {
+  font-family: var(--font-imperial-script), cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Couple-name lockup — mask image URL set inline; fill from motif tokens. */
+.couple-name-lockup {
+  display: block;
+  background: linear-gradient(
+    118deg,
+    var(--couple-name-fill) 0%,
+    var(--couple-name-fill-mid) 48%,
+    var(--couple-name-fill-accent) 100%
+  );
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Botanical decorations follow the motif (see --deco-filter). Matches corner
+   decos and eucalyptus sprigs only — not the wax seal or couple illustration.
+   The encoded variants cover images served through next/image. */
+img[src*="-deco.png"],
+img[src*="/lovestorydeco/"],
+img[src*="-deco.png&"],
+img[src*="%2Flovestorydeco%2F"] {
+  filter: var(--deco-filter);
+}
+
+/* Couple names only — Anastasia Script (public/fonts/AnastasiaScript.ttf). */
+.couple-anastasia,
+.anastasia-script {
+  font-family: "CoupleAnastasia" !important;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Beautiful Malera — elegant wedding script */
+.beautiful-malera {
+  font-family: var(--font-beautiful-malera), cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Sorts Mill Goudy — invitation body text */
+.font-goudy-italic {
+  font-family: "SortsMillGoudy", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Wedding invitation double-frame accent */
+.wedding-frame-inner {
+  pointer-events: none;
+  position: absolute;
+  inset: 0.5rem;
+  border-radius: inherit;
+  border: 1px solid color-mix(in srgb, var(--color-motif-deep) 18%, transparent);
+}
+
+@media (min-width: 640px) {
+  .wedding-frame-inner {
+    inset: 0.65rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .wedding-frame-inner {
+    inset: 0.85rem;
+  }
+}
+
+/* Layered welcome title — fluid lockup */
+.welcome-title-lockup {
+  overflow: visible;
+  padding-top: 0.25rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Lavishly Yours font utility class */
+.lavishly-yours-regular {
+  font-family: "Lavishly Yours", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1C8B8;
+}
+
+/* Updated scrollbar color to primary */
+::-webkit-scrollbar-thumb {
+  background: #44413C;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C5BDB5;
+}
+
+/* Shimmer animation for countdown cards */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Floating animations for decorative elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  33% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  66% {
+    transform: translateY(10px) translateX(-10px);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  33% {
+    transform: translateY(15px) translateX(-15px);
+  }
+  66% {
+    transform: translateY(-10px) translateX(15px);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 10s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* Enhanced shadow for cards */
+.shadow-3xl {
+  box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+}
+
+/* Style Script font for hero names */
+.style-script-regular {
+  font-family: "Style Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Cinzel font utility class */
+.cinzel {
+  font-family: "Cinzel", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Countdown gradient text — blush pink to slate */
+.countdown-gradient-text * {
+  background: linear-gradient(180deg, #D9A08C 0%, #44413C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Wedding colors for Love Story section */
+.bg-wedding-brown {
+  background-color: var(--color-motif-deep);
+}
+
+.bg-wedding-paper {
+  background-color: #FFF8F2;
+}
+
+.text-wedding-brown {
+  color: var(--color-motif-deep);
+}
+
+.text-wedding-paper {
+  color: #FFF8F2;
+}
+
+/* Font utilities for Love Story section */
+.font-heading {
+  font-family: "Style Script", cursive;
+  font-weight: 400;
+}
+
+.font-body {
+  font-family: "Crimson Text", serif;
+}
+
+/* Gentle rotation animation for couple photos */
+@keyframes gentleRotate {
+  0%, 100% {
+    transform: rotate(var(--base-rot, 0deg)) scale(1.1);
+  }
+  50% {
+    transform: rotate(calc(var(--base-rot, 0deg) + 3deg)) scale(1.1);
+  }
+}
+
+/* Book of Guests carousel — roll-out (current slide exits with page-turn feel) */
+@keyframes guest-roll-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0) translateZ(0) rotateX(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-32px) translateZ(-40px) rotateX(8deg) scale(0.98);
+  }
+}
+
+/* Book of Guests carousel — roll-in (new cards enter with stagger + subtle 3D) */
+@keyframes guest-roll-in {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) translateZ(-20px) rotateX(-6deg) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) translateZ(0) rotateX(0deg) scale(1);
+  }
+}
+
+/* Reduced motion: simple fade only */
+@keyframes guest-roll-out-reduced {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes guest-roll-in-reduced {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-guest-roll-out {
+  animation: guest-roll-out 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  transform-style: preserve-3d;
+}
+
+.animate-guest-roll-in {
+  animation: guest-roll-in 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+  transform-style: preserve-3d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-guest-roll-out {
+    animation: guest-roll-out-reduced 0.35s ease-out forwards;
+  }
+  .animate-guest-roll-in {
+    animation: guest-roll-in-reduced 0.35s ease-out backwards;
+  }
+}
+
+/* Love story photo album — flipbook page turn */
+.album-flipbook {
+  perspective: 1600px;
+  perspective-origin: center center;
+}
+
+.album-flipbook-stage {
+  transform-style: preserve-3d;
+}
+
+.album-flipbook-page {
+  position: relative;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+}
+
+.album-flipbook-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.album-flipbook-front {
+  position: relative;
+  z-index: 1;
+}
+
+.album-flipbook-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  z-index: 0;
+  box-shadow: inset 0 0 24px rgba(68, 65, 60, 0.06);
+}
+
+.album-flipbook-page-turning {
+  animation: album-page-turn-out 1s cubic-bezier(0.42, 0, 0.22, 1) forwards;
+}
+
+@keyframes album-page-turn-out {
+  0% {
+    transform: rotateY(0deg);
+    box-shadow: 0 6px 28px -8px rgba(68, 65, 60, 0.16);
+  }
+  45% {
+    transform: rotateY(-92deg);
+    box-shadow: -12px 6px 36px -6px rgba(68, 65, 60, 0.22);
+  }
+  100% {
+    transform: rotateY(-180deg);
+    box-shadow: 0 2px 12px -4px rgba(68, 65, 60, 0.1);
+  }
+}
+
+@keyframes album-page-fade {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes album-page-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Landscape-only story sections — one full image per page */
+.album-flipbook-landscape-shell .album-flipbook-stage,
+.album-flipbook-landscape-shell .album-flipbook-page,
+.album-flipbook-landscape-shell .album-flipbook-front,
+.album-flipbook-landscape-shell .album-flipbook-back {
+  min-height: inherit;
+}
+
+.album-flipbook-landscape-shell .album-flipbook-page {
+  width: 100%;
+}
+
+/* Story section — shared flip stage for portrait spreads and landscape singles */
+.album-flipbook-story-shell {
+  box-shadow:
+    0 2px 4px rgba(68, 65, 60, 0.06),
+    0 12px 40px -8px rgba(68, 65, 60, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.album-flipbook-story-shell .album-flipbook-page,
+.album-flipbook-story-shell .album-flipbook-front,
+.album-flipbook-story-shell .album-flipbook-back {
+  min-height: inherit;
+}
+
+/* Open-book spread — two portrait photos per page */
+.album-flipbook-spread-shell {
+  box-shadow:
+    0 2px 4px rgba(68, 65, 60, 0.06),
+    0 12px 40px -8px rgba(68, 65, 60, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.album-flipbook-spine {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 20;
+  width: 3px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    rgba(68, 65, 60, 0.14),
+    rgba(68, 65, 60, 0.04) 35%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(68, 65, 60, 0.04) 65%,
+    rgba(68, 65, 60, 0.14)
+  );
+  box-shadow:
+    -2px 0 6px rgba(68, 65, 60, 0.08),
+    2px 0 6px rgba(68, 65, 60, 0.08);
+}
+
+.album-flipbook-half {
+  display: flex;
+  min-width: 0;
+  min-height: inherit;
+}
+
+.album-flipbook-half-left {
+  box-shadow: inset -6px 0 12px -8px rgba(68, 65, 60, 0.1);
+}
+
+.album-flipbook-half-right {
+  box-shadow: inset 6px 0 12px -8px rgba(68, 65, 60, 0.1);
+}
+
+.album-flipbook-blank-page {
+  display: flex;
+  height: 100%;
+  min-height: inherit;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-motif-cream) 0%,
+    color-mix(in srgb, var(--color-motif-cream) 88%, var(--color-motif-silver)) 100%
+  );
+}
+
+.album-flipbook-blank-page::after {
+  content: '';
+  width: 2.5rem;
+  height: 1px;
+  background: var(--color-motif-silver);
+  opacity: 0.45;
+}
+
+.album-flipbook-binding {
+  pointer-events: none;
+  position: absolute;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  left: 0.35rem;
+  z-index: 25;
+  width: 3px;
+  border-radius: 9999px;
+  opacity: 0.55;
+  background: linear-gradient(
+    to bottom,
+    var(--color-motif-soft),
+    var(--color-motif-accent),
+    var(--color-motif-soft)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .album-flipbook-page-turning {
+    animation: album-page-fade 0.8s ease-out forwards;
+  }
+
+  .album-flipbook-back {
+    display: none;
+  }
+}
+
+/* ── Dashboard (mobile) ─────────────────────────────────────────────────── */
+/* Compact fields on phones. (iOS input auto-zoom is prevented by the dashboard
+   layout's viewport setting, so fields don't need to be 16px.) */
+@media (max-width: 639px) {
+  .dashboard-root input:not([type="checkbox"]):not([type="radio"]):not(.dash-stepper-input),
+  .dashboard-root select,
+  .dashboard-root textarea {
+    font-size: 13.5px;
+  }
+}
+
+/* Modals rise from the bottom like a sheet on phones, fade/zoom in from sm up */
+.dash-sheet {
+  animation: dash-sheet-up 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (min-width: 640px) {
+  .dash-sheet {
+    animation-name: dash-sheet-pop;
+    animation-duration: 0.22s;
+  }
+}
+@keyframes dash-sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes dash-sheet-pop {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dash-sheet { animation: none; }
+}
+
+/* Elegant scrolling inside the dashboard: thin slate scrollbars, smooth + contained */
+.dashboard-root,
+.dashboard-root * {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-motif-accent) 45%, transparent) transparent;
+}
+.dashboard-root *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.dashboard-root *::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dashboard-root *::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-motif-accent) 40%, transparent) padding-box;
+}
+.dashboard-root *::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-motif-deep) 60%, transparent) padding-box;
+}
+.dashboard-root {
+  scroll-behavior: smooth;
+}
+/* Modal sheets scroll on their own: no page scroll-through, momentum on iOS */
+.dash-sheet {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-bottom: 6rem; /* focused fields stay above the sticky buttons */
+}
+
+/* Phones: scale the whole dashboard down (rem-based sizes ≈ 88%)
+   so more fits on screen while text stays comfortably readable. */
+@media (max-width: 639px) {
+  html:has(.dashboard-root) {
+    font-size: 14px;
+  }
+}
+
+/* Small centered dialogs (success / loading) */
+.dash-pop {
+  animation: dash-sheet-pop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.dash-pop-badge {
+  animation: dash-badge-in 0.5s 0.08s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes dash-badge-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dash-pop, .dash-pop-badge { animation: none; }
+}
+
+
+/* Flat-tinted decoration image (components/tinted-deco.tsx) — color: --color-deco */
+.tinted-deco {
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* The blush florals in /public/deco/new-deco are full-color artwork, so they are
+   shown as painted (natural blush, dusty rose, sage and burgundy) rather than as
+   a flat --color-deco silhouette. */
+.tinted-deco__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/* ==========================================================================
+   Invitation design system — shared pieces (tokens: --invite-* above)
+   ========================================================================== */
+
+/* Couple names, loading-screen style: nickname · "and" · nickname.
+   Fonts come from the component (The Seasons / Above the Beyond). */
+.invite-names {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-weight: 400;
+}
+
+.invite-names__nick {
+  display: block;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--invite-title);
+}
+
+.invite-names__and {
+  display: block;
+  margin: -0.15em 0 -0.05em;
+  line-height: 1.15;
+  color: var(--invite-script);
+}
+
+/* Modal veil + panel (any dialog on an invitation surface) */
+.invite-modal-backdrop {
+  background: var(--invite-overlay);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.invite-modal-panel {
+  background: var(--invite-paper);
+  border: 1px solid var(--invite-line-soft);
+  box-shadow: 0 30px 60px -24px var(--invite-shadow);
+  color: var(--invite-ink);
+}
+
+/* --------------------------------------------------------------------------
+   Special invitation — page frame (components/proposal-page.tsx)
+   Corner decorations pinned to the screen corners, behind the card.
+   Color: --color-deco (TintedDeco). Size: --invite-corner-size.
+   -------------------------------------------------------------------------- */
+.invite-corners {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  --invite-corner-size: min(48vw, 200px);
+}
+
+@media (min-width: 640px) {
+  .invite-corners { --invite-corner-size: 300px; }
+}
+
+@media (min-width: 1024px) {
+  .invite-corners { --invite-corner-size: 400px; }
+}
+
+@media (min-width: 1440px) {
+  .invite-corners { --invite-corner-size: 480px; }
+}
+
+.invite-corner {
+  position: absolute;
+  opacity: 0;
+  animation:
+    invite-corner-in 1.6s cubic-bezier(0.22, 1, 0.36, 1) var(--invite-corner-delay, 0.2s) forwards,
+    invite-corner-sway 9s ease-in-out calc(var(--invite-corner-delay, 0.2s) + 1.6s) infinite alternate;
+}
+
+.invite-corner .tinted-deco,
+.invite-corner__img {
+  display: block;
+  width: var(--invite-corner-size);
+  max-width: none;
+  height: auto;
+  user-select: none;
+}
+
+.invite-corner--tl { left: 0; top: 0; transform-origin: top left; --invite-corner-from: translate(-12%, -12%); }
+.invite-corner--tr { right: 0; top: 0; transform-origin: top right; --invite-corner-from: translate(12%, -12%); --invite-corner-delay: 0.35s; }
+.invite-corner--bl { left: 0; bottom: 0; transform-origin: bottom left; --invite-corner-from: translate(-12%, 12%); --invite-corner-delay: 0.5s; }
+.invite-corner--br { right: 0; bottom: 0; transform-origin: bottom right; --invite-corner-from: translate(12%, 12%); --invite-corner-delay: 0.65s; }
+
+@keyframes invite-corner-in {
+  from { opacity: 0; transform: var(--invite-corner-from) scale(0.9); }
+  to { opacity: 0.95; transform: none; }
+}
+
+@keyframes invite-corner-sway {
+  from { opacity: 0.95; transform: rotate(0deg) scale(1); }
+  to { opacity: 0.95; transform: rotate(1.6deg) scale(1.025); }
+}
+
+/* Soft petals drifting up behind the card (colors set per petal in proposal-page.tsx) */
+.invite-motes {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.invite-mote {
+  position: absolute;
+  left: var(--x);
+  bottom: -24px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0;
+  animation: invite-mote-rise var(--dur) linear var(--delay) infinite;
+}
+
+.invite-mote--petal {
+  width: calc(var(--size) * 1.6);
+  border-radius: 80% 0 80% 0;
+}
+
+@keyframes invite-mote-rise {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); }
+  12% { opacity: 0.7; }
+  85% { opacity: 0.55; }
+  100% { opacity: 0; transform: translate3d(var(--drift), -105vh, 0) rotate(var(--spin)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invite-corner { animation: none; opacity: 0.95; }
+  .invite-motes { display: none; }
+}
+
+/* Looping video behind the loading screen and home hero
+   (components/background-video.tsx): fills its positioned parent,
+   with a white wash on top. */
+.background-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--color-motif-soft);
+}
+.background-video__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.background-video__veil {
+  position: absolute;
+  inset: 0;
+  /* Beige → light paper wash so the photos sit softly under the warm gray palette */
+  background: linear-gradient(180deg, #F1C8B8 0%, #FFF8F2 50%, #F1C8B8 100%);
+}
+
+/* ==========================================================================
+   Sky garden backdrop (components/sky-backdrop.tsx)
+   beige at the edges, cloud-white through the middle; clouds tile every
+   900px so long sections stay covered, and drift very slowly sideways.
+   ========================================================================== */
+.sky-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-motif-medium) 24%, white) 0%,
+    var(--color-motif-soft) 22%,
+    #FFFFFF 50%,
+    var(--color-motif-soft) 78%,
+    color-mix(in srgb, var(--color-motif-medium) 24%, white) 100%
+  );
+}
+
+.sky-backdrop__clouds,
+.sky-backdrop__sun,
+.sky-backdrop__haze {
+  position: absolute;
+  inset: 0;
+}
+
+/* Soft clouds: wide white ellipses with a hint of sky shading underneath */
+.sky-backdrop__clouds {
+  inset: 0 -50%;
+  background-image:
+    radial-gradient(22% 9% at 14% 12%, rgb(255 255 255 / 95%) 0%, rgb(255 255 255 / 60%) 45%, transparent 75%),
+    radial-gradient(16% 7% at 22% 15%, color-mix(in srgb, var(--color-motif-medium) 18%, transparent) 0%, transparent 75%),
+    radial-gradient(18% 8% at 62% 34%, rgb(255 255 255 / 90%) 0%, rgb(255 255 255 / 50%) 45%, transparent 75%),
+    radial-gradient(26% 10% at 88% 62%, rgb(255 255 255 / 85%) 0%, rgb(255 255 255 / 45%) 45%, transparent 75%),
+    radial-gradient(14% 6% at 36% 84%, rgb(255 255 255 / 80%) 0%, transparent 75%),
+    radial-gradient(20% 8% at 80% 92%, color-mix(in srgb, var(--color-motif-medium) 14%, transparent) 0%, transparent 75%);
+  background-size: 100% 900px;
+  background-repeat: repeat-y;
+  filter: blur(6px);
+  animation: sky-drift 120s linear infinite alternate;
+}
+
+/* Sun glow top-right (first section of a run) */
+.sky-backdrop__sun {
+  background: radial-gradient(40% 22% at 92% 0%, color-mix(in srgb, var(--color-motif-silver) 45%, transparent) 0%, transparent 70%);
+}
+
+/* Sage haze along the bottom (last section of a run) */
+.sky-backdrop__haze {
+  background:
+    radial-gradient(60% 14% at 0% 100%, color-mix(in srgb, var(--color-motif-yellow) 16%, transparent) 0%, transparent 70%),
+    radial-gradient(60% 14% at 100% 100%, color-mix(in srgb, var(--color-motif-yellow) 14%, transparent) 0%, transparent 70%);
+}
+
+@keyframes sky-drift {
+  from { transform: translateX(-6%); }
+  to { transform: translateX(6%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-backdrop__clouds { animation: none; }
+}
+
+/* Gallery (mobile): arrows nudge outward to hint at swiping */
+.gallery-swipe-arrow {
+  animation: gallery-swipe-nudge 1.6s ease-in-out infinite;
+}
+.gallery-swipe-arrow--left { --nudge: -4px; }
+.gallery-swipe-arrow--right { --nudge: 4px; }
+
+@keyframes gallery-swipe-nudge {
+  0%, 100% { transform: translateX(0); opacity: 0.55; }
+  50% { transform: translateX(var(--nudge)); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-swipe-arrow { animation: none; }
+}
+
+
+/* ==========================================================================
+   Soft beige paper backdrop — loader, envelope and home hero (plain display).
+   Beige washing into light paper, with a faint blush-pink bloom at the top
+   and a whisper of warm gray at the foot. No photos, no patterns: calm and airy.
+   ========================================================================== */
+.invite-blush-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, #D9A08C 85%, transparent) 0%, transparent 65%),
+    radial-gradient(80% 40% at 0% 100%, color-mix(in srgb, #C5BDB5 10%, transparent) 0%, transparent 70%),
+    radial-gradient(80% 40% at 100% 100%, color-mix(in srgb, #C5BDB5 10%, transparent) 0%, transparent 70%),
+    linear-gradient(180deg, #F1C8B8 0%, #FFF8F2 55%, #F1C8B8 100%);
+}
+
+.invite-blush-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 2px, rgb(255 255 255 / 18%) 2px 3px),
+    repeating-linear-gradient(0deg, transparent 0 3px, rgb(68 65 60 / 1.5%) 3px 4px);
+}
+
+
+/* ==========================================================================
+   Top corner florals on the invitation sections (hero, love story, details,
+   entourage, guests, playlist, see you there, gallery). The top artwork is a
+   tall garland, so it is sized by height to stay a small spray; bottom
+   corners keep their own width-based sizes.
+   Works on a plain <img> and on <TintedDeco> (sizes its inner image).
+   ========================================================================== */
+.deco-corner-top {
+  --deco-top-h: min(30vh, 240px);
+  display: block;
+  width: auto;
+  max-width: none;
+  height: var(--deco-top-h);
+  user-select: none;
+  pointer-events: none;
+}
+
+.deco-corner-top.tinted-deco {
+  height: auto;
+}
+
+.deco-corner-top .tinted-deco__img {
+  width: auto;
+  max-width: none;
+  height: var(--deco-top-h);
+}
+
+@media (min-width: 640px) {
+  .deco-corner-top { --deco-top-h: 300px; }
+}
+
+@media (min-width: 1024px) {
+  .deco-corner-top { --deco-top-h: 380px; }
+}
+
+/* Where a floral corner sits on top, the garland hangs longer so it still
+   shows below the corner */
+.deco-corner-top.deco-corner-top--long { --deco-top-h: min(44vh, 360px); }
+
+@media (min-width: 640px) {
+  .deco-corner-top.deco-corner-top--long { --deco-top-h: 440px; }
+}
+
+@media (min-width: 1024px) {
+  .deco-corner-top.deco-corner-top--long { --deco-top-h: 560px; }
+}
+
+/* Floral corner layered over the top garland — same size as the loader /
+   envelope corner overlay (loading-screen.css → .loading-screen__plain-corner-overlay) */
+.deco-corner-overlay {
+  display: block;
+  width: min(44vw, 190px);
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .deco-corner-overlay { width: 240px; }
+}
+
+@media (min-width: 1024px) {
+  .deco-corner-overlay { width: 320px; }
+}
+
+
+/* ==========================================================================
+   Love story (components/sections/love-story.tsx) — header spacing + corners
+   ========================================================================== */
+/* Side padding keeps the title clear of the hanging garlands */
+.love-story-header {
+  padding-left: clamp(3.5rem, 16vw, 9rem);
+  padding-right: clamp(3.5rem, 16vw, 9rem);
+}
+
+/* Phones: garland ends just above the first chapter so it never sits on the
+   photo or the story text */
+@media (max-width: 639px) {
+  .deco-corner-top.deco-corner-top--long.love-story-garland { --deco-top-h: min(34vh, 250px); }
+}
+
+/* Floral corners: soft shadow so they sit on the page instead of looking pasted on */
+.deco-corner-overlay {
+  filter: drop-shadow(0 6px 10px rgb(68 65 60 / 14%));
+}
+
+
+/* ==========================================================================
+   Shared section decoration — gallery section + /gallery page (and any section
+   that wants the loader's look). Paths come from content/site.ts.
+     .section-wash   translucent light white-warm-gray over the circle pattern
+     .deco-frame     thin double border (same as the loading screen)
+     .deco-corner--* corner florals, sized per corner like the loader
+   ========================================================================== */
+.section-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 18% at 50% 0%, rgb(255 255 255 / 60%) 0%, transparent 70%),
+    radial-gradient(60% 16% at 0% 40%, color-mix(in srgb, #D9A08C 28%, transparent) 0%, transparent 70%),
+    radial-gradient(60% 16% at 100% 70%, color-mix(in srgb, #D9A08C 24%, transparent) 0%, transparent 70%),
+    linear-gradient(180deg, rgb(255 255 255 / 52%) 0%, color-mix(in srgb, #F1C8B8 46%, transparent) 50%, rgb(255 255 255 / 46%) 100%);
+}
+
+.deco-frame {
+  position: absolute;
+  z-index: 3;
+  inset: clamp(0.6rem, 2vw, 0.9rem);
+  pointer-events: none;
+  border: 1.5px solid color-mix(in srgb, var(--color-motif-medium) 70%, transparent);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, white 45%, transparent),
+    0 0 0 1px color-mix(in srgb, white 30%, transparent);
+}
+
+.deco-frame::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid color-mix(in srgb, var(--color-motif-medium) 40%, transparent);
+  border-radius: 3px;
+}
+
+.deco-corner {
+  position: absolute;
+  z-index: 10;
+  display: block;
+  height: auto;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--color-welcome-navy) 18%, transparent));
+}
+
+.deco-corner--tl { left: 0; top: 0; width: min(36vw, 300px); }
+.deco-corner--tr { right: 0; top: 0; width: min(36vw, 300px); }
+.deco-corner--bl { left: 0; bottom: 0; width: min(44vw, 360px); }
+.deco-corner--br { right: 0; bottom: 0; width: min(44vw, 360px); }
+
+
+/* ==========================================================================
+   Love story — small pink hearts rising behind each chapter
+   (components/rising-hearts.tsx → RisingHearts)
+   ========================================================================== */
+.story-rise {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Stacked bands in tall sections (RisingHearts fill): hearts float up past
+   their band; the outer .story-rise clips them */
+.story-rise--band {
+  overflow: visible;
+}
+
+.story-rise__heart {
+  position: absolute;
+  bottom: -16px;
+  opacity: 0;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--color-motif-blush) 70%, transparent));
+  animation: story-rise-up linear infinite;
+  will-change: transform, opacity;
+}
+
+/* Each heart fades to its own --peak opacity and sways gently by --tilt */
+@keyframes story-rise-up {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg); }
+  15% { opacity: var(--peak, 0.6); }
+  50% { transform: translate3d(calc(var(--drift, 0px) * -0.5), -55vh, 0) rotate(var(--tilt, 8deg)); }
+  80% { opacity: calc(var(--peak, 0.6) * 0.75); }
+  100% { opacity: 0; transform: translate3d(var(--drift, 0px), -110vh, 0) rotate(calc(var(--tilt, 8deg) * -1)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-rise { display: none; }
+}
+
+/* See You There (components/sections/see-you-there.tsx): slow Ken Burns drift on the desktop triptych */
+@keyframes see-you-drift {
+  0%, 100% { transform: scale(1.04) translate3d(0, 0, 0); }
+  50% { transform: scale(1.1) translate3d(0, -1.5%, 0); }
+}
+.see-you-drift {
+  animation: see-you-drift 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+
+/* ==========================================================================
+   Entourage corners (components/sections/entourage.tsx) — pinned flush to the
+   section corners and larger than the shared .deco-corner sizes.
+   ========================================================================== */
+.entourage-corners {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.entourage-corners .deco-corner--tl,
+.entourage-corners .deco-corner--tr {
+  width: min(46vw, 380px);
+}
+
+.entourage-corners .deco-corner--bl,
+.entourage-corners .deco-corner--br {
+  width: min(54vw, 440px);
+}

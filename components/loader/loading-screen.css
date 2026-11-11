@@ -1,0 +1,5108 @@
+@font-face {
+  font-family: "CoupleAnastasia";
+  src:
+    url("./AnastasiaScript.ttf") format("truetype"),
+    url("/fonts/AnastasiaScript.ttf") format("truetype"),
+    url("/fonts/AnastasiaScript Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.loading-screen,
+.invite-photo-backdrop {
+  /* Champagne beige brown — aligned with app/globals.css motif + welcome tokens */
+  --ls-warm-base: var(--color-welcome-navy);
+  --ls-warm-mid: var(--color-motif-blush);
+  --ls-warm-glow: var(--color-welcome-gold);
+  --ls-forest: var(--color-motif-cream);
+  --ls-sage: var(--color-motif-blush);
+  --ls-mustard: var(--color-motif-yellow);
+  --ls-butter: var(--color-motif-silver);
+  --ls-cream: var(--color-motif-soft);
+  --ls-ink: var(--color-welcome-text);
+  --ls-shadow: var(--color-welcome-navy);
+  --ls-type-light: var(--color-motif-soft);
+  --ls-type-muted: color-mix(in srgb, var(--color-motif-soft) 92%, transparent);
+  --ls-surface-glass: color-mix(in srgb, var(--color-motif-soft) 18%, transparent);
+  --ls-border-light: color-mix(in srgb, var(--color-motif-soft) 45%, transparent);
+}
+
+.loading-screen {
+  background: var(--ls-cream);
+}
+
+.loading-screen__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: var(--ls-cream);
+}
+
+.loading-screen__marquee {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 100%;
+}
+
+.loading-screen__marquee--desktop {
+  display: none;
+  content-visibility: hidden;
+}
+
+.loading-screen__marquee--loader {
+  display: flex;
+  content-visibility: visible;
+}
+
+.loading-screen__marquee-row {
+  position: relative;
+  flex: 1 1 50%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.loading-screen__slide-track {
+  display: flex;
+  height: 100%;
+  width: max-content;
+  will-change: transform;
+}
+
+.loading-screen__marquee-row--left .loading-screen__slide-track {
+  animation: ls-slide-left 92s linear infinite;
+}
+
+.loading-screen__marquee-row--right .loading-screen__slide-track {
+  animation: ls-slide-right 108s linear infinite;
+}
+
+/* Shared clock (invite-photo-backdrop.tsx → --marquee-elapsed): every strip starts
+   that far into its slide, so loader → envelope → home hero line up exactly */
+.loading-screen__marquee .loading-screen__slide-track {
+  animation-delay: calc(var(--marquee-elapsed, 0s) * -1);
+}
+
+.loading-screen__slide-strip {
+  display: flex;
+  height: 100%;
+  flex-shrink: 0;
+  gap: 0.45rem;
+  padding-right: 0.45rem;
+}
+
+.loading-screen__slide-photo {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  height: 100%;
+  width: 82vw;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-motif-cream) 70%, white);
+}
+
+.loading-screen__slide-photo > img {
+  object-fit: cover;
+  object-position: center 28%;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+/* Soft fade-in once the photo has loaded (set by onLoad in invite-photo-backdrop.tsx) */
+.loading-screen__slide-photo > img[data-loaded] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen__slide-photo > img {
+    transition: none;
+  }
+}
+
+.loading-screen__backdrop-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ls-shadow) 52%, transparent) 0%,
+      color-mix(in srgb, var(--ls-shadow) 22%, transparent) 18%,
+      color-mix(in srgb, var(--ls-shadow) 8%, transparent) 42%,
+      color-mix(in srgb, var(--ls-shadow) 18%, transparent) 68%,
+      color-mix(in srgb, var(--ls-shadow) 58%, transparent) 100%
+    ),
+    radial-gradient(
+      ellipse 92% 52% at 50% 46%,
+      color-mix(in srgb, var(--ls-warm-glow) 10%, transparent) 0%,
+      transparent 72%
+    );
+}
+
+.loading-screen--invitation .loading-screen__slide-photo,
+.invite-photo-backdrop .loading-screen__slide-photo {
+  background: color-mix(in srgb, var(--color-motif-cream) 45%, white);
+  filter: sepia(0.04) saturate(0.92) brightness(1.08) contrast(1.02) hue-rotate(-8deg);
+}
+
+/* Plain loader / envelope strip: soft rounded tiles with a faint blush edge,
+   so it reads as a gentle photo wall rather than hard-edged blocks */
+.background-video .loading-screen__marquee {
+  padding: 0.45rem 0;
+}
+
+.background-video .loading-screen__slide-photo {
+  border-radius: 0.85rem;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-motif-blush) 55%, transparent);
+}
+
+.background-video .loading-screen__slide-photo > img {
+  border-radius: inherit;
+}
+
+@keyframes ls-slide-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes ls-slide-right {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.loading-screen__save-date {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Mediterranean invitation — ivory, champagne, blush (no green) */
+.loading-screen--invitation {
+  background: var(--color-welcome-bg);
+}
+
+.loading-screen--invitation .loading-screen__backdrop {
+  background-color: var(--color-welcome-bg);
+}
+
+.loading-screen.is-fading .loading-screen__save-date {
+  opacity: 0;
+  transition-duration: 0.55s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen__save-date {
+    transition-duration: 0.2s;
+  }
+}
+
+/* Full-screen scrim — keeps ivory type readable over photo marquee (esp. mobile) */
+.loading-screen__readability-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--ls-shadow) 42%, transparent) 0%,
+      color-mix(in srgb, var(--ls-shadow) 18%, transparent) 14%,
+      color-mix(in srgb, var(--ls-shadow) 12%, transparent) 50%,
+      color-mix(in srgb, var(--ls-shadow) 18%, transparent) 86%,
+      color-mix(in srgb, var(--ls-shadow) 42%, transparent) 100%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ls-shadow) 62%, transparent) 0%,
+      color-mix(in srgb, var(--ls-shadow) 48%, transparent) 12%,
+      color-mix(in srgb, var(--ls-shadow) 52%, transparent) 32%,
+      color-mix(in srgb, var(--ls-shadow) 58%, transparent) 48%,
+      color-mix(in srgb, var(--ls-shadow) 54%, transparent) 62%,
+      color-mix(in srgb, var(--ls-shadow) 46%, transparent) 78%,
+      color-mix(in srgb, var(--ls-shadow) 68%, transparent) 100%
+    );
+}
+
+@media (min-width: 768px) {
+  .loading-screen__readability-scrim {
+    opacity: 0.72;
+  }
+}
+
+.loading-screen__std-headline {
+  margin: 0;
+  font-family: var(--font-brittany);
+  color: var(--ls-type-light);
+  font-size: clamp(2.8rem, 10vw, 5.5rem);
+  line-height: 1.05;
+  font-weight: 400;
+  text-shadow:
+    0 1px 2px color-mix(in srgb, var(--ls-shadow) 55%, transparent),
+    0 8px 22px color-mix(in srgb, var(--ls-shadow) 45%, transparent);
+}
+
+.loading-screen__std-kicker {
+  margin-top: 0.85rem;
+  text-align: center;
+  white-space: nowrap;
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  color: var(--ls-type-light);
+  font-size: clamp(0.82rem, 3.8vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--ls-shadow) 55%, transparent);
+}
+
+.loading-screen__std-box {
+  border: 1px solid color-mix(in srgb, var(--color-motif-soft) 45%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-motif-soft) 18%, transparent),
+    0 16px 36px color-mix(in srgb, var(--ls-shadow) 12%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--color-motif-soft) 35%, transparent);
+  background: color-mix(in srgb, var(--color-motif-soft) 18%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.loading-screen__std-box-overlay {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ls-shadow) 18%, transparent) 0%,
+    color-mix(in srgb, var(--ls-shadow) 6%, transparent) 38%,
+    color-mix(in srgb, var(--ls-shadow) 72%, transparent) 100%
+  );
+}
+
+.loading-screen__std-box-num {
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  font-weight: 500;
+  color: var(--ls-type-light);
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--ls-shadow) 70%, transparent);
+}
+
+.loading-screen__std-box-label {
+  color: rgb(255 248 242 / 92%);
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  letter-spacing: 0.24em;
+  text-shadow: 0 1px 8px color-mix(in srgb, var(--ls-shadow) 60%, transparent);
+}
+
+.loading-screen__std-eyebrow {
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  font-size: clamp(0.62rem, 2.8vw, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ls-type-light);
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--ls-shadow) 55%, transparent);
+}
+
+.loading-screen__std-copy {
+  margin: 0.35rem 0 0;
+  max-width: 22rem;
+  text-align: center;
+  font-family: "SortsMillGoudy", Georgia, "Times New Roman", serif;
+  font-size: clamp(0.95rem, 3.4vw, 1.2rem);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ls-type-light);
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--ls-shadow) 55%, transparent);
+}
+
+.loading-screen__std-names-slot {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  padding: 0.25rem 1rem 0.5rem;
+}
+
+.loading-screen__std-names-slot::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 0;
+  width: min(96%, 30rem);
+  height: min(92%, 11rem);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 72% 62% at 50% 50%,
+    color-mix(in srgb, var(--ls-shadow) 58%, transparent) 0%,
+    color-mix(in srgb, var(--ls-shadow) 32%, transparent) 42%,
+    color-mix(in srgb, var(--ls-shadow) 10%, transparent) 68%,
+    transparent 82%
+  );
+}
+
+.loading-screen__std-names {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: min(94%, 30rem);
+  aspect-ratio: 2020 / 779;
+  margin: 0 auto;
+  background: linear-gradient(
+    118deg,
+    var(--couple-name-fill, var(--color-welcome-navy)) 0%,
+    var(--couple-name-fill-mid, var(--color-motif-deep)) 48%,
+    var(--couple-name-fill-accent, var(--color-welcome-heading)) 100%
+  );
+  pointer-events: none;
+  user-select: none;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  filter:
+    drop-shadow(0 0 1px color-mix(in srgb, var(--color-motif-soft) 80%, transparent))
+    drop-shadow(0 1px 1px color-mix(in srgb, var(--ls-shadow) 90%, transparent))
+    drop-shadow(0 3px 8px color-mix(in srgb, var(--ls-shadow) 70%, transparent))
+    drop-shadow(0 10px 28px color-mix(in srgb, var(--ls-shadow) 45%, transparent));
+}
+
+/* Photos loader — ivory lockup on dark marquee scrim */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-names {
+  background: var(--couple-name-fill-soft, var(--color-motif-soft));
+}
+
+.loading-screen__std-rule {
+  position: relative;
+  width: 3.25rem;
+  height: 1px;
+  margin: 0.55rem 0 0.65rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-motif-soft) 55%, transparent) 50%,
+    transparent 100%
+  );
+}
+
+.loading-screen__std-rule::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-motif-soft) 70%, transparent);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-motif-soft) 25%, transparent);
+}
+
+.loading-screen__std-status {
+  margin-bottom: 0.45rem;
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  font-size: clamp(0.58rem, 2.5vw, 0.68rem);
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ls-type-light);
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--ls-shadow) 55%, transparent);
+}
+
+.loading-screen__std-track {
+  height: 3px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-motif-silver) 55%, white);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-welcome-gold) 22%, transparent);
+}
+
+.loading-screen__std-bar {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation: ls-std-progress linear forwards;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-motif-yellow) 85%, white) 0%,
+    var(--color-welcome-gold) 55%,
+    color-mix(in srgb, var(--color-motif-blush) 35%, var(--color-welcome-gold)) 100%
+  );
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-welcome-gold) 45%, transparent);
+}
+
+.loading-screen__overlay {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(34rem, 100%);
+  height: 100%;
+  padding:
+    clamp(2.5rem, 10vh, 5rem)
+    clamp(1.25rem, 6vw, 2.5rem)
+    max(1.5rem, calc(1.15rem + env(safe-area-inset-bottom, 0px)));
+  pointer-events: none;
+  text-align: center;
+}
+
+.loading-screen__verse {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  max-width: 28rem;
+  margin: 0;
+}
+
+.loading-screen__verse-ref {
+  margin: 0;
+  font-size: clamp(0.78rem, 3.4vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ls-butter);
+  text-shadow: 0 1px 12px rgb(68 65 60 / 55%);
+}
+
+.loading-screen__verse-text {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 1.35rem 1.65rem 0.2rem;
+}
+
+.loading-screen__verse-text p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0 0.35rem;
+  font-size: clamp(1.15rem, 5.2vw, 1.72rem);
+  line-height: 1.58;
+  color: var(--ls-cream);
+  text-shadow: 0 2px 16px rgb(68 65 60 / 62%);
+}
+
+.loading-screen__quote-mark {
+  position: absolute;
+  font-family: "Goudy Old Style", "Goudy Bookletter 1911", Georgia, serif;
+  font-size: clamp(2.75rem, 11vw, 4.25rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--ls-mustard);
+  opacity: 0.72;
+  text-shadow: 0 2px 12px rgb(68 65 60 / 45%);
+  pointer-events: none;
+  user-select: none;
+}
+
+.loading-screen__quote-mark--open {
+  top: -0.35rem;
+  left: 0.15rem;
+}
+
+.loading-screen__quote-mark--close {
+  right: 0.2rem;
+  bottom: -0.1rem;
+}
+
+.loading-screen__invite {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+}
+
+.loading-screen__eyebrow {
+  margin: 0;
+  font-size: clamp(0.72rem, 3.2vw, 0.88rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ls-cream);
+  opacity: 0.94;
+  text-align: center;
+  text-shadow: 0 1px 12px rgb(68 65 60 / 55%);
+}
+
+.loading-screen__kicker {
+  margin: 0.4rem 0 0.7rem;
+  font-size: clamp(0.68rem, 2.8vw, 0.8rem);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ls-butter);
+  opacity: 0.92;
+  text-shadow: 0 1px 10px rgb(68 65 60 / 50%);
+}
+
+.loading-screen__names {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 22rem;
+  padding-inline: 0.25rem;
+}
+
+.loading-screen__names-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1672 / 940;
+  background: linear-gradient(
+    118deg,
+    var(--couple-name-fill, var(--color-welcome-navy)) 0%,
+    var(--couple-name-fill-mid, var(--color-motif-deep)) 48%,
+    var(--couple-name-fill-accent, var(--color-welcome-heading)) 100%
+  );
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 4px 18px rgb(68 65 60 / 45%));
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.loading-screen__rule {
+  position: relative;
+  display: block;
+  width: 3.25rem;
+  height: 1px;
+  margin: 0.85rem 0 0.9rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--ls-mustard) 85%, var(--ls-cream)) 50%,
+    transparent 100%
+  );
+  transform-origin: center;
+}
+
+.loading-screen__rule::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ls-mustard);
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 0 2px rgb(255 248 242 / 18%);
+}
+
+.loading-screen__date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+.loading-screen__weekday {
+  font-size: clamp(0.7rem, 3vw, 0.84rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ls-cream);
+  opacity: 0.82;
+  text-shadow: 0 1px 10px rgb(68 65 60 / 50%);
+}
+
+.loading-screen__date {
+  font-size: clamp(0.98rem, 4vw, 1.18rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ls-cream);
+  text-shadow: 0 1px 12px rgb(68 65 60 / 55%);
+}
+
+.loading-screen__ceremony {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.32rem;
+  margin-top: 0.95rem;
+}
+
+.loading-screen__ceremony-label {
+  font-size: clamp(0.62rem, 2.6vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ls-butter);
+  opacity: 0.95;
+  text-shadow: 0 1px 10px rgb(68 65 60 / 50%);
+}
+
+.loading-screen__ceremony-meta {
+  font-size: clamp(0.72rem, 3vw, 0.88rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ls-cream);
+  opacity: 0.9;
+  text-shadow: 0 1px 10px rgb(68 65 60 / 50%);
+}
+
+.loading-screen__footer {
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-screen__status {
+  position: relative;
+  width: 100%;
+  height: 1.75rem;
+  margin-bottom: 0.55rem;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+}
+
+.loading-screen__status-roller {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.loading-screen__status-line {
+  height: 1.75rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 0.25rem;
+  font-family: inherit;
+  font-size: clamp(0.68rem, 3vw, 0.82rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ls-cream);
+  opacity: 0.88;
+  text-shadow: 0 1px 10px rgb(68 65 60 / 50%);
+}
+
+.loading-screen__track {
+  width: min(58%, 8.5rem);
+  height: 3px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgb(255 248 242 / 28%);
+  box-shadow: inset 0 0 0 1px rgb(255 248 242 / 12%);
+}
+
+.loading-screen__bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--ls-butter) 0%,
+    var(--ls-mustard) 55%,
+    var(--ls-cream) 100%
+  );
+  transition: width 0.28s ease-out;
+}
+
+@media (max-width: 767px) {
+  .loading-screen__overlay {
+    width: 100%;
+    padding-inline: 0.65rem;
+  }
+
+  .loading-screen__verse {
+    max-width: 100%;
+  }
+
+  .loading-screen__verse-text {
+    padding: 1.15rem 0.55rem 0.1rem;
+  }
+
+  .loading-screen__verse-text p {
+    white-space: nowrap;
+    padding: 0;
+    font-size: clamp(1.05rem, 4.7vw, 1.15rem);
+    letter-spacing: -0.012em;
+    line-height: 1.35;
+  }
+
+  .loading-screen__quote-mark {
+    font-size: clamp(1.85rem, 8vw, 2.6rem);
+  }
+
+  .loading-screen__quote-mark--open {
+    top: -0.2rem;
+    left: 0;
+  }
+
+  .loading-screen__quote-mark--close {
+    right: 0;
+    bottom: -0.05rem;
+  }
+}
+
+@media (min-width: 480px) {
+  .loading-screen__eyebrow {
+    font-size: clamp(0.78rem, 2.4vw, 0.92rem);
+  }
+
+  .loading-screen__kicker {
+    font-size: 0.78rem;
+    margin: 0.45rem 0 0.8rem;
+  }
+
+  .loading-screen__names {
+    max-width: 24rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .loading-screen__marquee--mobile {
+    display: none;
+    content-visibility: hidden;
+  }
+
+  .loading-screen__marquee--desktop {
+    display: flex;
+    content-visibility: visible;
+  }
+
+  .loading-screen__slide-photo {
+    width: 38vw;
+  }
+
+  .loading-screen__slide-photo > img {
+    object-position: center 24%;
+  }
+
+  .loading-screen__marquee-row--left .loading-screen__slide-track {
+    animation-duration: 108s;
+  }
+
+  .loading-screen__marquee-row--right .loading-screen__slide-track {
+    animation-duration: 126s;
+  }
+
+  .loading-screen__overlay {
+    width: min(38rem, 100%);
+    padding:
+      clamp(3rem, 9vh, 5.5rem)
+      2rem
+      max(1.75rem, calc(1.35rem + env(safe-area-inset-bottom, 0px)));
+  }
+
+  .loading-screen__verse {
+    max-width: 32rem;
+  }
+
+  .loading-screen__verse-ref {
+    font-size: 0.94rem;
+    letter-spacing: 0.24em;
+  }
+
+  .loading-screen__verse-text {
+    padding: 1.5rem 2rem 0.25rem;
+  }
+
+  .loading-screen__verse-text p {
+    font-size: 1.78rem;
+    line-height: 1.62;
+    padding-inline: 0.5rem;
+  }
+
+  .loading-screen__quote-mark {
+    font-size: 4.5rem;
+  }
+
+  .loading-screen__quote-mark--open {
+    top: -0.45rem;
+    left: 0.35rem;
+  }
+
+  .loading-screen__quote-mark--close {
+    right: 0.45rem;
+    bottom: -0.15rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .loading-screen__names {
+    max-width: 28rem;
+  }
+}
+
+@media (max-height: 700px) and (max-width: 430px) {
+  .loading-screen__overlay {
+    padding:
+      1.75rem
+      0.6rem
+      max(0.85rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .loading-screen__verse-ref {
+    font-size: clamp(0.68rem, 3vw, 0.78rem);
+    letter-spacing: 0.18em;
+  }
+
+  .loading-screen__verse-text {
+    padding: 1.1rem 0.5rem 0.1rem;
+  }
+
+  .loading-screen__verse-text p {
+    font-size: clamp(1.05rem, 4.7vw, 1.15rem);
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  .loading-screen__quote-mark {
+    font-size: clamp(2.35rem, 10vw, 3.15rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen__slide-track {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .loading-screen__bar {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .loading-screen__bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(255 255 255 / 48%) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: ls-bar-shimmer 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes ls-bar-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Shared mobile photo backdrop — loading screen + envelope invitation */
+.invite-photo-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: var(--ls-cream);
+}
+
+.invite-photo-backdrop--page {
+  display: block;
+}
+
+.invite-photo-backdrop-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 18;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.invite-photo-backdrop-wrap .invite-photo-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Main site hero — photo marquee scoped to #home (not fixed full-viewport) */
+.invite-photo-backdrop-wrap--section {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.invite-photo-backdrop-wrap--section .invite-photo-backdrop,
+.invite-photo-backdrop.invite-photo-backdrop--section {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Main site #home hero — plain vs photos (components/sections/hero.tsx) */
+.home-hero--plain .invite-plain-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.home-hero--plain .home-hero-plain-corners {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.home-hero--plain .home-hero-plain-corner-img {
+  display: block;
+  height: auto;
+  width: auto;
+  max-width: min(42vw, 165px);
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .home-hero--plain .home-hero-plain-corner-img {
+    max-width: 245px;
+  }
+}
+
+.home-hero--photos .home-hero-photo-scrim {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-welcome-navy) 58%, transparent) 0%,
+    color-mix(in srgb, var(--color-welcome-navy) 36%, transparent) 22%,
+    color-mix(in srgb, var(--color-welcome-navy) 42%, transparent) 48%,
+    color-mix(in srgb, var(--color-welcome-navy) 48%, transparent) 72%,
+    color-mix(in srgb, var(--color-welcome-navy) 68%, transparent) 100%
+  );
+}
+
+.home-hero--photos .home-hero-title-glow {
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-welcome-navy) 46%, transparent) 0%,
+    color-mix(in srgb, var(--color-welcome-navy) 18%, transparent) 46%,
+    transparent 72%
+  );
+}
+
+.home-hero--plain .home-hero-title-glow {
+  /* plain background: no halo behind the title */
+  background: none;
+}
+
+.home-hero--photos .home-hero-title-main {
+  color: var(--color-motif-soft);
+  text-shadow:
+    0 1px 0 color-mix(in srgb, var(--color-motif-soft) 35%, transparent),
+    0 2px 18px color-mix(in srgb, var(--color-welcome-navy) 55%, transparent),
+    0 12px 36px color-mix(in srgb, var(--color-welcome-navy) 40%, transparent);
+}
+
+.home-hero--photos .home-hero-title-script {
+  color: var(--color-welcome-gold);
+  text-shadow:
+    0 1px 0 color-mix(in srgb, var(--color-motif-soft) 28%, transparent),
+    0 4px 18px color-mix(in srgb, var(--color-welcome-navy) 50%, transparent),
+    0 0 28px color-mix(in srgb, var(--color-welcome-gold) 45%, transparent);
+}
+
+/* Plain: text on the light peach circle pattern (colors: globals.css → --color-on-pattern*) */
+.home-hero--plain .home-hero-title-main,
+.home-hero--plain .home-hero-title-script {
+  color: var(--color-on-pattern);
+  text-shadow:
+    0 1px 0 var(--color-on-pattern-glow),
+    0 3px 16px var(--color-on-pattern-glow);
+}
+
+.home-hero--photos .home-hero-eyebrow,
+.home-hero--photos .home-hero-date,
+.home-hero--photos .home-hero-meta,
+.home-hero--photos .home-hero-countdown-value,
+.home-hero--photos .home-hero-countdown-label,
+.home-hero--photos .home-hero-countdown-heading {
+  color: color-mix(in srgb, var(--color-motif-soft) 92%, transparent);
+  text-shadow: 0 1px 12px color-mix(in srgb, var(--color-welcome-navy) 40%, transparent);
+}
+
+.home-hero--photos .home-hero-countdown-label {
+  color: color-mix(in srgb, var(--color-motif-soft) 80%, transparent);
+}
+
+.home-hero--plain .home-hero-eyebrow,
+.home-hero--plain .home-hero-meta,
+.home-hero--plain .home-hero-date {
+  color: var(--color-on-pattern);
+  text-shadow:
+    0 1px 0 var(--color-on-pattern-glow),
+    0 2px 12px var(--color-on-pattern-glow);
+}
+
+.home-hero--plain .home-hero-eyebrow,
+.home-hero--plain .home-hero-meta,
+.home-hero--plain .home-hero-countdown-heading {
+  font-weight: 700;
+}
+
+.home-hero--photos .home-hero-countdown-bar {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-welcome-navy) 28%, transparent) 28%,
+    color-mix(in srgb, var(--color-welcome-gold) 72%, var(--color-motif-deep)) 100%
+  );
+}
+
+/* Countdown: a band that fades up from the bottom edge (colors: globals.css → --color-countdown-*) */
+.home-hero--plain .home-hero-countdown-bar {
+  padding-top: clamp(3.5rem, 12vh, 6rem);
+  background: linear-gradient(
+    to top,
+    var(--color-countdown-fade) 0%,
+    color-mix(in srgb, var(--color-countdown-fade) 88%, transparent) 30%,
+    color-mix(in srgb, var(--color-countdown-fade) 45%, transparent) 65%,
+    transparent 100%
+  );
+}
+
+.home-hero--plain .home-hero-countdown-value,
+.home-hero--plain .home-hero-countdown-heading {
+  color: var(--color-countdown-text);
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--color-countdown-fade) 60%, transparent);
+}
+
+.home-hero--plain .home-hero-countdown-label {
+  color: var(--color-countdown-label);
+  text-shadow: none;
+}
+
+/* Full-bleed section corners — couple-video, etc. (matches hero plain corners) */
+.invite-section-corners {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.invite-section-corner-img {
+  display: block;
+  height: auto;
+  width: auto;
+  max-width: min(42vw, 165px);
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .invite-section-corner-img {
+    max-width: 245px;
+  }
+}
+
+.invite-section-corner-img--animated {
+  opacity: 0;
+  animation: love-story-corner-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.invite-section-corner-img--tl {
+  animation-delay: 0.12s;
+  transform-origin: top left;
+}
+
+.invite-section-corner-img--tr {
+  animation-delay: 0.22s;
+  transform-origin: top right;
+}
+
+.invite-section-corner-img--bl {
+  animation-delay: 0.32s;
+  transform-origin: bottom left;
+}
+
+.invite-section-corner-img--br {
+  animation-delay: 0.42s;
+  transform-origin: bottom right;
+}
+
+@keyframes love-story-corner-in {
+  from {
+    opacity: 0;
+    transform: scale(0.88) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Love story — plain timeline chapters */
+.love-story-root {
+  position: relative;
+}
+
+.love-story-plain-track {
+  position: relative;
+}
+
+/* Plain: section band opposite the card (light card on sage band, dark card on linen band) */
+/* Sage bands feather into the linen above/below so there is no hard seam */
+.love-story-plain-track {
+  --ls-feather: clamp(110px, 18vw, 220px);
+}
+
+.love-story-plain-track--theme-light {
+  --ls-band: var(--color-welcome-green);
+  --ls-edge: var(--color-welcome-bg);
+  background: linear-gradient(
+    180deg,
+    var(--ls-edge) 0,
+    color-mix(in oklab, var(--ls-edge) 82%, var(--ls-band)) calc(var(--ls-feather) * 0.25),
+    color-mix(in oklab, var(--ls-edge) 45%, var(--ls-band)) calc(var(--ls-feather) * 0.55),
+    color-mix(in oklab, var(--ls-edge) 12%, var(--ls-band)) calc(var(--ls-feather) * 0.82),
+    var(--ls-band) var(--ls-feather),
+    var(--ls-band) calc(100% - var(--ls-feather)),
+    color-mix(in oklab, var(--ls-edge) 12%, var(--ls-band)) calc(100% - var(--ls-feather) * 0.82),
+    color-mix(in oklab, var(--ls-edge) 45%, var(--ls-band)) calc(100% - var(--ls-feather) * 0.55),
+    color-mix(in oklab, var(--ls-edge) 82%, var(--ls-band)) calc(100% - var(--ls-feather) * 0.25),
+    var(--ls-edge) 100%
+  );
+}
+
+/* Every band's glow orbs fade out before the band edge, so no clipped seam shows */
+.love-story-plain-track .story-plain-atmosphere {
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 var(--ls-feather),
+    #000 calc(100% - var(--ls-feather)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    #000 var(--ls-feather),
+    #000 calc(100% - var(--ls-feather)),
+    transparent 100%
+  );
+}
+
+.love-story-plain-track--theme-dark {
+  background: var(--color-welcome-bg);
+}
+
+/* No overflow clipping here: iOS Safari clips both axes when overflow-x is
+   clip, which sliced the eucalyptus sprigs at each chapter's top edge.
+   .love-story-root (overflow-x-hidden) already stops horizontal scroll. */
+.love-story-plain-track {
+  overflow: visible;
+}
+
+/* Blur orbs behind plain chapters */
+.story-plain-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.story-plain-atmosphere__blobs {
+  position: absolute;
+  inset: -20%;
+}
+
+.story-plain-atmosphere__blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.story-plain-atmosphere__blob--a {
+  width: min(70vw, 320px);
+  height: min(70vw, 320px);
+  left: -8%;
+  top: 10%;
+  filter: blur(52px);
+  animation: story-plain-blob-a 24s ease-in-out infinite alternate;
+}
+
+.story-plain-atmosphere__blob--b {
+  width: min(58vw, 280px);
+  height: min(58vw, 280px);
+  right: -6%;
+  top: 28%;
+  filter: blur(48px);
+  animation: story-plain-blob-b 28s ease-in-out infinite alternate;
+}
+
+.story-plain-atmosphere__blob--c {
+  width: min(64vw, 300px);
+  height: min(64vw, 300px);
+  left: 28%;
+  bottom: -8%;
+  filter: blur(54px);
+  animation: story-plain-blob-c 26s ease-in-out infinite alternate;
+}
+
+.love-story-plain-track--theme-light .story-plain-atmosphere__blob--a {
+  background: color-mix(in srgb, var(--color-motif-soft) 70%, var(--color-motif-silver));
+  opacity: 0.55;
+}
+
+.love-story-plain-track--theme-light .story-plain-atmosphere__blob--b {
+  background: color-mix(in srgb, var(--color-motif-yellow) 65%, var(--color-motif-blush));
+  opacity: 0.45;
+}
+
+.love-story-plain-track--theme-light .story-plain-atmosphere__blob--c {
+  background: color-mix(in srgb, var(--color-motif-medium) 60%, var(--color-motif-accent));
+  opacity: 0.4;
+}
+
+.love-story-plain-track--theme-dark .story-plain-atmosphere__blob--a {
+  background: color-mix(in srgb, var(--color-motif-blush) 75%, var(--color-motif-silver));
+  opacity: 0.62;
+}
+
+.love-story-plain-track--theme-dark .story-plain-atmosphere__blob--b {
+  background: color-mix(in srgb, var(--color-motif-yellow) 55%, var(--color-motif-medium));
+  opacity: 0.5;
+}
+
+.love-story-plain-track--theme-dark .story-plain-atmosphere__blob--c {
+  background: color-mix(in srgb, var(--color-motif-accent) 50%, var(--color-motif-deep));
+  opacity: 0.35;
+}
+
+@keyframes story-plain-blob-a {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(5%, 4%, 0) scale(1.07); }
+}
+
+@keyframes story-plain-blob-b {
+  0% { transform: translate3d(0, 0, 0) scale(1.03); }
+  100% { transform: translate3d(-4%, 5%, 0) scale(1); }
+}
+
+@keyframes story-plain-blob-c {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(3%, -4%, 0) scale(1.06); }
+}
+
+.love-story-plain-track::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+  /* Continuous thread through all chapters; only the very ends fade */
+  --ls-thread-top: color-mix(in srgb, var(--color-motif-medium) 50%, transparent);
+  --ls-thread-bottom: color-mix(in srgb, var(--color-motif-medium) 50%, transparent);
+  background: linear-gradient(
+    180deg,
+    var(--ls-thread-top) 0%,
+    color-mix(in srgb, var(--color-motif-accent) 45%, transparent) 50%,
+    var(--ls-thread-bottom) 100%
+  );
+  pointer-events: none;
+}
+
+.love-story-plain-track--first::before {
+  --ls-thread-top: transparent;
+}
+
+.love-story-plain-track--last::before {
+  --ls-thread-bottom: transparent;
+}
+
+.story-plain-card {
+  position: relative;
+  isolation: isolate;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-motif-soft) 55%, transparent);
+  background: color-mix(in srgb, var(--color-welcome-bg) 42%, transparent);
+  backdrop-filter: blur(18px) saturate(1.12);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
+  box-shadow:
+    0 8px 28px color-mix(in srgb, var(--color-motif-deep) 10%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--color-motif-soft) 65%, transparent);
+}
+
+.story-plain-card--dark {
+  border-color: color-mix(in srgb, var(--color-motif-soft) 28%, transparent);
+  background: color-mix(in srgb, var(--color-welcome-green) 38%, transparent);
+  backdrop-filter: blur(20px) saturate(1.08);
+  -webkit-backdrop-filter: blur(20px) saturate(1.08);
+  box-shadow:
+    0 10px 32px color-mix(in srgb, var(--color-welcome-navy) 22%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--color-motif-soft) 18%, transparent);
+}
+
+.story-plain-card__frost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--color-motif-soft) 52%, transparent) 0%,
+    color-mix(in srgb, var(--color-motif-soft) 28%, transparent) 42%,
+    color-mix(in srgb, var(--color-welcome-bg-soft) 22%, transparent) 100%
+  );
+}
+
+.story-plain-card--dark .story-plain-card__frost {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--color-motif-soft) 14%, transparent) 0%,
+    color-mix(in srgb, var(--color-motif-accent) 12%, transparent) 48%,
+    color-mix(in srgb, var(--color-motif-deep) 18%, transparent) 100%
+  );
+}
+
+.story-plain-card__euc {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  height: auto;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+.story-plain-card__euc--center {
+  left: 50%;
+  top: 0;
+  width: min(22vw, 80px);
+  max-width: 92px;
+  transform: translate(-50%, -58%);
+}
+
+/* Side sprigs frame the card corners. On phones the card nearly fills the
+   screen, so they only poke ~14px past its edge to stay inside the viewport. */
+.story-plain-card__euc--left {
+  left: 0;
+  top: 0;
+  width: min(20vw, 76px);
+  max-width: 96px;
+  transform: translate(-14px, -40%);
+}
+
+.story-plain-card__euc--right {
+  right: 0;
+  bottom: 0;
+  width: min(17vw, 66px);
+  max-width: 82px;
+  transform: translate(14px, 30%);
+}
+
+@media (min-width: 640px) {
+  .story-plain-card__euc--center {
+    width: min(18vw, 96px);
+    max-width: 108px;
+    transform: translate(-50%, -58%);
+  }
+
+  .story-plain-card__euc--left {
+    width: min(20vw, 118px);
+    max-width: 130px;
+    transform: translate(-48%, -38%);
+  }
+
+  .story-plain-card__euc--right {
+    width: min(16vw, 96px);
+    max-width: 108px;
+    transform: translate(46%, 28%);
+  }
+}
+
+.love-story-footer-euc {
+  display: block;
+  width: min(58vw, 220px);
+  max-width: 250px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.95;
+}
+
+.story-plain-card__dot {
+  position: absolute;
+  left: 50%;
+  top: -0.35rem;
+  z-index: 5;
+  height: 0.55rem;
+  width: 0.55rem;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: var(--color-motif-yellow);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-welcome-green) 85%, transparent);
+}
+
+.love-story-plain-track--theme-dark .story-plain-card__dot {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-welcome-bg) 92%, transparent);
+}
+
+.story-plain-chapter-label {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.22em;
+  color: var(--color-welcome-heading);
+}
+
+.story-plain-card--dark .story-plain-chapter-label {
+  color: color-mix(in srgb, var(--color-motif-soft) 88%, transparent);
+}
+
+.story-plain-chapter-line {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--color-motif-deep) 32%, transparent) 18%,
+    color-mix(in srgb, var(--color-motif-yellow) 55%, transparent) 50%,
+    color-mix(in srgb, var(--color-motif-deep) 32%, transparent) 82%,
+    transparent
+  );
+}
+
+.story-plain-chapter-line--dark {
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--color-motif-soft) 28%, transparent) 18%,
+    color-mix(in srgb, var(--color-motif-soft) 45%, transparent) 50%,
+    color-mix(in srgb, var(--color-motif-soft) 28%, transparent) 82%,
+    transparent
+  );
+}
+
+.story-plain-chapter-connector {
+  position: absolute;
+  left: 50%;
+  bottom: -2.25rem;
+  z-index: 3;
+  display: flex;
+  transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.story-plain-chapter-connector__stem {
+  display: block;
+  width: 1px;
+  height: 2.25rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-motif-accent) 55%, transparent),
+    color-mix(in srgb, var(--color-motif-medium) 35%, transparent)
+  );
+}
+
+.story-plain-card {
+  margin-bottom: 2.25rem;
+}
+
+@media (max-width: 767px) {
+  .love-story-plain-track::before {
+    opacity: 0.35;
+  }
+
+  .story-plain-chapter-connector {
+    bottom: -1.75rem;
+  }
+
+  .story-plain-chapter-connector__stem {
+    height: 1.75rem;
+  }
+
+  .story-plain-card {
+    margin-bottom: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invite-section-corner-img--animated {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .story-plain-atmosphere__blob {
+    animation: none;
+  }
+}
+
+.env-invite-screen .invite-photo-backdrop-wrap--envelope {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.invite-photo-backdrop.invite-photo-backdrop--envelope {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.env-invite-readability-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ls-shadow) 34%, transparent) 0%,
+      color-mix(in srgb, var(--ls-shadow) 16%, transparent) 28%,
+      color-mix(in srgb, var(--ls-shadow) 22%, transparent) 62%,
+      color-mix(in srgb, var(--ls-shadow) 42%, transparent) 100%
+    );
+}
+
+/* Marquee inside invite-photo-backdrop — show on mobile and desktop */
+.invite-photo-backdrop .loading-screen__marquee--mobile {
+  display: flex;
+  content-visibility: visible;
+}
+
+@media (min-width: 768px) {
+  .invite-photo-backdrop-wrap--loading {
+    display: none;
+  }
+
+  .invite-photo-backdrop .loading-screen__slide-photo {
+    width: 38vw;
+  }
+
+  .invite-photo-backdrop .loading-screen__slide-photo > img {
+    object-position: center 24%;
+  }
+
+  .invite-photo-backdrop .loading-screen__marquee-row--left .loading-screen__slide-track {
+    animation-duration: 108s;
+  }
+
+  .invite-photo-backdrop .loading-screen__marquee-row--right .loading-screen__slide-track {
+    animation-duration: 126s;
+  }
+}
+
+@media (max-width: 767px) {
+  .loading-screen {
+    background: transparent;
+  }
+
+  .loading-screen__backdrop {
+    display: none;
+  }
+}
+
+/* ---- Save-the-date refinements ---- */
+
+@keyframes ls-std-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes ls-std-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes ls-std-status-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ls-std-kenburns {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+
+.ls-reveal {
+  opacity: 0;
+  animation: ls-std-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) var(--ls-delay, 0ms) forwards;
+}
+
+.loading-screen__std-box-img {
+  transform: scale(1.04);
+  animation: ls-std-kenburns 12s ease-out forwards;
+}
+
+.loading-screen__std-box::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  z-index: 1;
+  border: 1px solid color-mix(in srgb, var(--color-motif-soft) 38%, transparent);
+  border-radius: calc(1rem - 4px);
+  pointer-events: none;
+}
+
+.loading-screen__std-status {
+  animation: ls-std-status-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.loading-screen__std-footer {
+  padding-bottom: max(1.25rem, calc(0.75rem + env(safe-area-inset-bottom, 0px)));
+}
+
+.loading-screen__std-venue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  margin-bottom: 0.7rem;
+  text-align: center;
+}
+
+.loading-screen__std-venue-time {
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  font-size: clamp(0.66rem, 2.9vw, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ls-type-light);
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--ls-shadow) 60%, transparent);
+}
+
+.loading-screen__std-venue-name {
+  font-family: "SortsMillGoudy", Georgia, "Times New Roman", serif;
+  font-size: clamp(0.9rem, 3.4vw, 1.08rem);
+  font-style: italic;
+  color: var(--ls-type-muted);
+  text-shadow: 0 1px 10px color-mix(in srgb, var(--ls-shadow) 60%, transparent);
+}
+
+/* Short screens: tighten the stack so everything fits without scrolling */
+@media (max-height: 680px) {
+  .loading-screen__std-venue {
+    margin-bottom: 0.4rem;
+  }
+  .loading-screen__std-copy {
+    display: none;
+  }
+}
+
+.loading-screen.is-reduced-motion .ls-reveal,
+.loading-screen.is-reduced-motion .loading-screen__std-status {
+  opacity: 1;
+  animation: none;
+}
+
+.loading-screen.is-reduced-motion .loading-screen__std-box-img {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-reveal,
+  .loading-screen__std-status {
+    opacity: 1;
+    animation: none;
+  }
+  .loading-screen__std-box-img {
+    animation: none;
+  }
+}
+
+/* ---- Plain (no images) display — siteConfig.loadingScreen.display = "plain" ----
+   Silk: champagne fabric with slow-drifting light folds, fine grain, gold-foil date. */
+
+.loading-screen--plain {
+  --ls-plain-bg: var(--color-welcome-bg);
+  --ls-plain-ink: var(--color-welcome-text);
+  --ls-plain-accent: var(--color-welcome-gold);
+  --ls-silk-light: color-mix(in srgb, white 70%, var(--ls-plain-bg));
+  --ls-silk-shade: color-mix(in srgb, var(--color-welcome-heading) 12%, var(--ls-plain-bg));
+  --ls-gold-deep: color-mix(in srgb, var(--ls-plain-accent) 72%, var(--color-welcome-navy));
+  --ls-gold-light: color-mix(in srgb, var(--ls-plain-accent) 45%, var(--color-motif-soft));
+  background: transparent;
+  color: var(--ls-plain-ink);
+}
+
+.loading-screen--plain .invite-plain-atmosphere {
+  z-index: 0;
+}
+
+.loading-screen--plain .loading-screen__plain-corners {
+  z-index: 2;
+}
+
+.loading-screen--plain .loading-screen__plain-frame {
+  z-index: 2;
+}
+
+/* Couple illustration — soft watermark behind silk */
+.loading-screen__plain-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.loading-screen__plain-bg-image {
+  object-fit: contain;
+  object-position: center 72%;
+  opacity: 0.38;
+  transform: scale(1.02);
+  filter: saturate(0.92);
+}
+
+.loading-screen__plain-bg-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--ls-plain-bg) 0%,
+      color-mix(in srgb, var(--ls-plain-bg) 55%, transparent) 18%,
+      transparent 42%,
+      color-mix(in srgb, var(--ls-plain-bg) 45%, transparent) 62%,
+      var(--ls-plain-bg) 100%
+    ),
+    radial-gradient(
+      ellipse 88% 72% at 50% 48%,
+      color-mix(in srgb, var(--ls-plain-bg) 62%, transparent),
+      var(--ls-plain-bg) 76%
+    );
+}
+
+/* Silk fabric layers (decorative, behind content) */
+.loading-screen__silk {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 45%, var(--ls-silk-light), transparent 70%),
+    radial-gradient(ellipse 120% 80% at 50% 120%, var(--ls-silk-shade), transparent 60%),
+    transparent;
+  opacity: 0.92;
+}
+
+/* Broad diagonal folds: alternating highlight / shadow bands, blurred into drapes */
+.loading-screen__silk-fold {
+  position: absolute;
+  inset: -40%;
+  filter: blur(28px);
+  will-change: transform;
+}
+
+.loading-screen__silk-fold--a {
+  background: linear-gradient(
+    118deg,
+    transparent 8%,
+    var(--ls-silk-shade) 18%,
+    var(--ls-silk-light) 28%,
+    transparent 36%,
+    var(--ls-silk-shade) 46%,
+    var(--ls-silk-light) 55%,
+    var(--ls-silk-shade) 66%,
+    transparent 74%,
+    var(--ls-silk-light) 84%,
+    transparent 94%
+  );
+  opacity: 0.85;
+  animation: ls-silk-drift-a 22s ease-in-out infinite alternate;
+}
+
+.loading-screen__silk-fold--b {
+  background: linear-gradient(
+    62deg,
+    transparent 14%,
+    var(--ls-silk-light) 26%,
+    transparent 38%,
+    var(--ls-silk-shade) 52%,
+    transparent 62%,
+    var(--ls-silk-light) 76%,
+    transparent 88%
+  );
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  animation: ls-silk-drift-b 28s ease-in-out infinite alternate;
+}
+
+/* Satin sheen: a narrow band of light gliding across the fabric */
+.loading-screen__silk-sheen {
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgb(255 255 255 / 0%) 44%,
+    rgb(255 255 255 / 55%) 50%,
+    rgb(255 255 255 / 0%) 56%,
+    transparent 62%
+  );
+  background-size: 250% 100%;
+  filter: blur(14px);
+  mix-blend-mode: soft-light;
+  animation: ls-silk-sheen 9s ease-in-out infinite;
+}
+
+/* Fine woven grain so the surface reads as fabric, not a gradient */
+.loading-screen__silk-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.09;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.24  0 0 0 0 0.18  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@keyframes ls-silk-drift-a {
+  0% { transform: translate3d(-4%, -2%, 0) rotate(0deg) scale(1); }
+  100% { transform: translate3d(5%, 3%, 0) rotate(2deg) scale(1.06); }
+}
+
+@keyframes ls-silk-drift-b {
+  0% { transform: translate3d(4%, 2%, 0) rotate(0deg) scale(1.04); }
+  100% { transform: translate3d(-5%, -3%, 0) rotate(-2.5deg) scale(1); }
+}
+
+@keyframes ls-silk-sheen {
+  0% { background-position: 120% 0; }
+  60%, 100% { background-position: -40% 0; }
+}
+
+/* Viewport corner ornaments + inset gold double frame */
+.loading-screen__plain-corners {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.loading-screen__plain-corner-img {
+  display: block;
+  height: auto;
+  width: auto;
+  max-width: min(42vw, 165px);
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .loading-screen__plain-corner-img {
+    max-width: 245px;
+  }
+}
+
+@media (min-width: 768px) {
+  .loading-screen__plain-corner-img {
+    max-width: 320px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .loading-screen__plain-corner-img {
+    max-width: 400px;
+  }
+}
+
+.loading-screen__plain-frame {
+  position: absolute;
+  inset: max(0.9rem, env(safe-area-inset-top, 0px)) 0.9rem max(0.9rem, env(safe-area-inset-bottom, 0px));
+  z-index: 2;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--ls-plain-accent) 50%, transparent);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, white 35%, transparent);
+}
+
+.loading-screen__plain-frame::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid color-mix(in srgb, var(--ls-plain-accent) 28%, transparent);
+}
+
+.loading-screen--plain .loading-screen__std-headline {
+  margin-top: clamp(2.25rem, 9vw, 3.75rem);
+  color: var(--ls-gold-deep);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 60%);
+}
+
+.loading-screen--plain .loading-screen__std-kicker,
+.loading-screen--plain .loading-screen__std-eyebrow,
+.loading-screen--plain .loading-screen__std-venue-time,
+.loading-screen--plain .loading-screen__std-status {
+  color: var(--ls-plain-ink);
+  text-shadow: none;
+}
+
+.loading-screen--plain .loading-screen__std-copy,
+.loading-screen--plain .loading-screen__std-venue-name {
+  color: color-mix(in srgb, var(--ls-plain-ink) 82%, transparent);
+  text-shadow: none;
+}
+
+.loading-screen--plain .loading-screen__std-names-slot::before {
+  display: none;
+}
+
+.loading-screen--plain .loading-screen__std-names {
+  background: linear-gradient(
+    118deg,
+    var(--couple-name-fill, var(--color-welcome-navy)) 0%,
+    var(--couple-name-fill-mid, var(--color-motif-deep)) 46%,
+    var(--couple-name-fill-accent, var(--color-welcome-heading)) 100%
+  );
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--ls-plain-ink) 14%, transparent));
+}
+
+/* ---- Engraved date line: WEEKDAY / Month | 17 | 2026 ---- */
+
+.ls-silk-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.ls-silk-date__weekday,
+.ls-silk-date__side,
+.ls-silk-date__day {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ls-silk-date .is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.ls-silk-date__weekday {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  font-size: clamp(0.62rem, 2.6vw, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ls-gold-deep);
+}
+
+.ls-silk-date__weekday::before,
+.ls-silk-date__weekday::after {
+  content: "";
+  width: clamp(1.75rem, 8vw, 3rem);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ls-plain-accent));
+}
+
+.ls-silk-date__weekday::after {
+  background: linear-gradient(90deg, var(--ls-plain-accent), transparent);
+}
+
+.ls-silk-date__row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: min(100%, 24rem);
+}
+
+/* Month and year: small caps between hairlines */
+.ls-silk-date__side {
+  justify-self: stretch;
+  padding: 0.45rem 0;
+  border-block: 1px solid color-mix(in srgb, var(--ls-plain-accent) 55%, transparent);
+  text-align: center;
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  font-size: clamp(0.7rem, 3vw, 0.92rem);
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ls-plain-ink);
+}
+
+/* Day: large gold-foil numeral with a gliding glint */
+.ls-silk-date__day {
+  padding: 0 clamp(0.9rem, 4.5vw, 1.6rem);
+  /* Playfair Display: high-contrast serif with elegant display numerals */
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3.4rem, 17vw, 5.4rem);
+  font-weight: 500;
+  font-variant-numeric: lining-nums proportional-nums;
+  line-height: 1;
+  background: linear-gradient(
+    100deg,
+    var(--ls-gold-deep) 0%,
+    var(--ls-plain-accent) 22%,
+    var(--ls-gold-light) 38%,
+    var(--color-motif-soft) 46%,
+    var(--ls-gold-light) 54%,
+    var(--ls-plain-accent) 70%,
+    var(--ls-gold-deep) 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 rgb(255 255 255 / 70%)) drop-shadow(0 6px 14px color-mix(in srgb, var(--ls-plain-ink) 14%, transparent));
+}
+
+.ls-silk-date__day.is-visible {
+  animation: ls-gold-glint 6s ease-in-out 0.8s infinite;
+}
+
+@keyframes ls-gold-glint {
+  0% { background-position: 100% 0; }
+  45%, 100% { background-position: 0% 0; }
+}
+
+@media (max-height: 680px) {
+  .ls-silk-date__day {
+    font-size: clamp(2.8rem, 13vw, 4rem);
+  }
+}
+
+.loading-screen--plain .loading-screen__std-rule {
+  background: linear-gradient(90deg, transparent, var(--ls-plain-accent), transparent);
+}
+
+.loading-screen--plain .loading-screen__std-rule::after {
+  background: var(--ls-plain-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ls-plain-accent) 20%, transparent);
+}
+
+.loading-screen--plain .loading-screen__std-track {
+  background: color-mix(in srgb, var(--ls-plain-accent) 22%, transparent);
+  box-shadow: none;
+}
+
+.loading-screen--plain .loading-screen__std-bar {
+  background: linear-gradient(90deg, var(--ls-gold-deep), var(--ls-gold-light), var(--ls-plain-accent));
+  box-shadow: none;
+}
+
+/* Reduced motion: still fabric, no glint */
+.loading-screen--plain.is-reduced-motion .loading-screen__silk-fold,
+.loading-screen--plain.is-reduced-motion .loading-screen__silk-sheen,
+.loading-screen--plain.is-reduced-motion .ls-silk-date__day {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen__silk-fold,
+  .loading-screen__silk-sheen,
+  .ls-silk-date__day.is-visible {
+    animation: none;
+  }
+  .ls-silk-date__weekday,
+  .ls-silk-date__side,
+  .ls-silk-date__day {
+    transition: none;
+  }
+}
+
+
+/* ==========================================================================
+   Plain mode — "wedding invitation" card
+   Linen backdrop in the sage motif, an arched paper card with a fine inner
+   frame, eucalyptus ornament and classic invitation wording.
+   ========================================================================== */
+
+/* Linen backdrop: calmer, greener orbs + warm paper base */
+.loading-screen--plain .invite-plain-atmosphere__base {
+  background:
+    radial-gradient(120% 80% at 50% 0%, var(--color-motif-silver) 0%, transparent 60%),
+    linear-gradient(180deg, var(--color-motif-cream) 0%, var(--color-welcome-bg-soft) 45%, var(--color-motif-silver) 100%);
+}
+
+.loading-screen--plain .invite-plain-atmosphere__blob {
+  opacity: 0.32;
+}
+
+.loading-screen--plain .invite-plain-atmosphere__frost {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-motif-soft) 40%, transparent) 0%,
+    color-mix(in srgb, var(--color-motif-cream) 30%, transparent) 100%
+  );
+}
+
+/* Viewport double border — sits under the corner florals so they drape over it */
+.loading-screen--plain .loading-screen__plain-frame {
+  z-index: 1;
+  inset:
+    max(0.75rem, env(safe-area-inset-top, 0px))
+    max(0.75rem, env(safe-area-inset-right, 0px))
+    max(0.75rem, env(safe-area-inset-bottom, 0px))
+    max(0.75rem, env(safe-area-inset-left, 0px));
+  border: 1.5px solid color-mix(in srgb, var(--color-motif-medium) 70%, transparent);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, white 45%, transparent),
+    0 0 0 1px color-mix(in srgb, white 30%, transparent);
+}
+
+.loading-screen--plain .loading-screen__plain-frame::after {
+  inset: 5px;
+  border: 1px solid color-mix(in srgb, var(--color-motif-medium) 40%, transparent);
+  border-radius: 3px;
+}
+
+/* Corner florals — each corner sized to its own artwork.
+   Top pieces are square, bottom pieces are wide, so they get separate widths. */
+.loading-screen--plain .loading-screen__plain-corner-img {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  opacity: 1;
+  filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--color-welcome-navy) 18%, transparent));
+}
+
+.loading-screen--plain .loading-screen__plain-corner-slot--tl,
+.loading-screen--plain .loading-screen__plain-corner-slot--tr {
+  width: min(36vw, 26vh, 300px);
+}
+
+.loading-screen--plain .loading-screen__plain-corner-slot--bl,
+.loading-screen--plain .loading-screen__plain-corner-slot--br {
+  width: min(44vw, 30vh, 360px);
+}
+
+
+/* Arched invitation card */
+.loading-screen--plain .loading-screen__save-date {
+  --ls-card-w: min(92vw, 29rem);
+  flex: 0 1 auto;
+  width: var(--ls-card-w);
+  height: min(
+    calc(100dvh - max(1.6rem, env(safe-area-inset-top, 0px)) - max(1.6rem, env(safe-area-inset-bottom, 0px))),
+    50rem
+  );
+  margin: auto;
+  padding: 0 0.25rem;
+  border-radius: calc(var(--ls-card-w) / 2) calc(var(--ls-card-w) / 2) 1.75rem 1.75rem;
+  background:
+    radial-gradient(90% 45% at 50% 0%, color-mix(in srgb, white 70%, transparent) 0%, transparent 70%),
+    linear-gradient(180deg, var(--color-motif-soft) 0%, var(--color-welcome-bg-soft) 55%, var(--color-motif-cream) 100%);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 80%) inset,
+    0 0 0 1px color-mix(in srgb, var(--color-motif-medium) 45%, transparent),
+    0 30px 60px -30px color-mix(in srgb, var(--color-welcome-navy) 50%, transparent),
+    0 10px 24px -14px color-mix(in srgb, var(--color-welcome-navy) 30%, transparent);
+}
+
+/* Fine inner frame that follows the arch */
+.loading-screen--plain .loading-screen__save-date::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  pointer-events: none;
+  border-radius: calc(var(--ls-card-w) / 2 - 9px) calc(var(--ls-card-w) / 2 - 9px) calc(1.75rem - 6px) calc(1.75rem - 6px);
+  border: 1px solid color-mix(in srgb, var(--color-motif-medium) 60%, transparent);
+}
+
+.loading-screen--plain .loading-screen__save-date::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  pointer-events: none;
+  border-radius: calc(var(--ls-card-w) / 2 - 14px) calc(var(--ls-card-w) / 2 - 14px) calc(1.75rem - 10px) calc(1.75rem - 10px);
+  border: 1px solid color-mix(in srgb, var(--color-motif-medium) 28%, transparent);
+}
+
+.loading-screen--plain .loading-screen__save-date > * {
+  position: relative;
+  z-index: 1;
+}
+
+.loading-screen--plain .loading-screen__save-date header {
+  padding-top: clamp(2.4rem, 9vh, 3.6rem);
+}
+
+.loading-screen__plain-ornament {
+  display: block;
+  width: clamp(5.5rem, 26vw, 7.5rem);
+  height: auto;
+  margin: 0 auto 0.4rem;
+  user-select: none;
+}
+
+/* Typography in the motif */
+.loading-screen--plain .loading-screen__std-headline {
+  margin-top: 0;
+  color: var(--color-welcome-navy);
+  font-size: clamp(2.4rem, 11vw, 4rem);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 70%);
+}
+
+.loading-screen--plain .loading-screen__std-kicker {
+  margin-top: 0.5rem;
+  font-size: clamp(0.62rem, 2.8vw, 0.82rem);
+  letter-spacing: 0.3em;
+  color: var(--color-motif-accent);
+}
+
+.loading-screen__plain-line {
+  margin: 0;
+  padding: 0 1.5rem;
+  text-align: center;
+  font-family: "SortsMillGoudy", Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: clamp(0.85rem, 3.4vw, 1rem);
+  line-height: 1.35;
+  color: var(--color-welcome-text-soft);
+}
+
+.loading-screen--plain .loading-screen__std-names-slot {
+  padding-top: 0.1rem;
+  padding-bottom: 0.2rem;
+}
+
+.loading-screen--plain .loading-screen__std-names {
+  width: min(94%, 30rem);
+  filter: drop-shadow(0 1px 0 rgb(255 255 255 / 70%));
+}
+
+.loading-screen--plain .ls-silk-date {
+  padding-top: 0.6rem;
+}
+
+.loading-screen--plain .loading-screen__std-footer {
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+  padding-bottom: clamp(1.4rem, 4vh, 2.25rem);
+}
+
+.loading-screen--plain .loading-screen__std-venue {
+  margin-bottom: 0.5rem;
+}
+
+.loading-screen--plain .loading-screen__std-venue-time {
+  color: var(--color-motif-accent);
+}
+
+.loading-screen--plain .loading-screen__std-venue-name {
+  color: var(--color-welcome-text);
+}
+
+.loading-screen--plain .loading-screen__std-eyebrow {
+  color: var(--color-motif-accent);
+}
+
+.loading-screen--plain .loading-screen__std-copy {
+  color: var(--color-welcome-text-soft);
+  font-size: clamp(0.85rem, 3.2vw, 1.02rem);
+}
+
+.loading-screen--plain .loading-screen__std-status {
+  color: var(--color-welcome-text-soft);
+}
+
+.loading-screen--plain .loading-screen__std-rule {
+  background: linear-gradient(90deg, transparent, var(--color-motif-medium), transparent);
+}
+
+.loading-screen--plain .loading-screen__std-rule::after {
+  display: none;
+}
+
+.loading-screen--plain .loading-screen__std-track {
+  background: color-mix(in srgb, var(--color-motif-medium) 30%, transparent);
+}
+
+.loading-screen--plain .loading-screen__std-bar {
+  background: linear-gradient(90deg, var(--color-motif-medium), var(--color-motif-accent), var(--color-motif-deep));
+}
+
+/* Short screens: drop the secondary copy so the card never overflows */
+@media (max-height: 720px) {
+  .loading-screen--plain .loading-screen__std-copy,
+  .loading-screen--plain .loading-screen__std-eyebrow {
+    display: none;
+  }
+  .loading-screen__plain-ornament {
+    width: clamp(4.5rem, 20vw, 6rem);
+    margin-bottom: 0.2rem;
+  }
+}
+
+@media (max-height: 620px) {
+  .loading-screen--plain .loading-screen__plain-line {
+    display: none;
+  }
+}
+
+
+/* ---- Plain mode: centred loading text + refined progress ---- */
+
+.loading-screen--plain .loading-screen__std-footer {
+  text-align: center;
+}
+
+.loading-screen--plain .loading-screen__std-rule {
+  width: 4.5rem;
+  margin: 0.7rem auto 0.75rem;
+}
+
+.loading-screen--plain .loading-screen__std-status {
+  width: 100%;
+  margin: 0 auto 0.6rem;
+  text-align: center;
+  font-size: clamp(0.56rem, 2.4vw, 0.66rem);
+  letter-spacing: 0.3em;
+  /* balance trailing letter-spacing so the line is truly centred */
+  padding-left: 0.3em;
+  color: var(--color-motif-accent);
+}
+
+.loading-screen--plain [role="progressbar"] {
+  display: flex;
+  justify-content: center;
+  width: min(68%, 15rem);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loading-screen--plain .loading-screen__std-track {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  overflow: visible;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-motif-medium) 35%, transparent);
+}
+
+.loading-screen--plain .loading-screen__std-bar {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, var(--color-motif-medium), var(--color-motif-accent) 60%, var(--color-motif-deep));
+}
+
+/* Light sheen sliding along the filled bar */
+.loading-screen--plain .loading-screen__std-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 75%) 50%, transparent 100%);
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  animation: ls-plain-sheen 1.8s ease-in-out infinite;
+}
+
+/* Glowing point riding the leading edge of the bar */
+.ls-plain-progress-glow {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: var(--color-motif-deep);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--color-motif-soft) 85%, transparent),
+    0 0 12px 2px color-mix(in srgb, var(--color-motif-accent) 55%, transparent);
+  animation: ls-plain-glow-travel linear forwards;
+}
+
+@keyframes ls-plain-sheen {
+  0% { background-position: -40% 0; }
+  100% { background-position: 140% 0; }
+}
+
+@keyframes ls-plain-glow-travel {
+  from { left: 0%; }
+  to { left: 100%; }
+}
+
+/* ---- Plain mode: background + entrance animation ---- */
+
+/* Card rises softly into place */
+.loading-screen--plain .loading-screen__save-date {
+  /* backwards fill: holds the start frame before it plays, then releases so the fade-out still works */
+  animation: ls-plain-card-in 1.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes ls-plain-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Slow breathing light behind the card */
+.ls-plain-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 42% at 50% 46%, color-mix(in srgb, white 70%, transparent) 0%, transparent 70%),
+    radial-gradient(80% 60% at 50% 110%, color-mix(in srgb, var(--color-motif-medium) 35%, transparent) 0%, transparent 70%);
+  animation: ls-plain-breathe 9s ease-in-out infinite alternate;
+}
+
+@keyframes ls-plain-breathe {
+  from { opacity: 0.7; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.06); }
+}
+
+/* Pollen-like motes drifting upward */
+.ls-plain-motes {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ls-plain-mote {
+  position: absolute;
+  bottom: -12px;
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-motif-soft) 95%, transparent) 0%, color-mix(in srgb, var(--color-motif-medium) 70%, transparent) 70%);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-motif-soft) 80%, transparent);
+  opacity: 0;
+  animation: ls-plain-mote-rise var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes ls-plain-mote-rise {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  12% { opacity: 0.85; }
+  80% { opacity: 0.6; }
+  100% { transform: translate3d(var(--drift), -105vh, 0); opacity: 0; }
+}
+
+/* Corner foliage stays still so it lines up with the envelope hero's corners
+   on handoff (re-enable the sway with: animation: ls-plain-sway 7s ease-in-out infinite alternate;) */
+.loading-screen--plain .loading-screen__plain-corner-slot {
+  animation: none;
+}
+
+.loading-screen--plain .loading-screen__plain-corner-slot.left-0.top-0 { transform-origin: top left; }
+.loading-screen--plain .loading-screen__plain-corner-slot.right-0.top-0 { transform-origin: top right; animation-delay: -2s; }
+.loading-screen--plain .loading-screen__plain-corner-slot.left-0.bottom-0 { transform-origin: bottom left; animation-delay: -4s; }
+.loading-screen--plain .loading-screen__plain-corner-slot.right-0.bottom-0 { transform-origin: bottom right; animation-delay: -6s; }
+
+@keyframes ls-plain-sway {
+  from { transform: rotate(0deg) scale(1); }
+  to { transform: rotate(1.6deg) scale(1.02); }
+}
+
+/* Reduced motion: keep everything still */
+.loading-screen--plain.is-reduced-motion .ls-plain-progress-glow {
+  display: none;
+}
+
+.loading-screen--plain.is-reduced-motion .loading-screen__save-date,
+.loading-screen--plain.is-reduced-motion .ls-plain-glow,
+.loading-screen--plain.is-reduced-motion .loading-screen__plain-corner-slot,
+.loading-screen--plain.is-reduced-motion .loading-screen__std-bar::after {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen--plain .loading-screen__save-date,
+  .ls-plain-glow,
+  .ls-plain-mote,
+  .loading-screen--plain .loading-screen__plain-corner-slot,
+  .loading-screen--plain .loading-screen__std-bar::after {
+    animation: none;
+  }
+}
+
+/* Plain mode: darker day numeral (deep forest → deep sage) with a subtle glint */
+.loading-screen--plain .ls-silk-date__day {
+  background: linear-gradient(
+    100deg,
+    var(--color-welcome-navy) 0%,
+    var(--color-motif-deep) 30%,
+    var(--color-motif-accent) 44%,
+    color-mix(in srgb, var(--color-motif-medium) 70%, var(--color-motif-soft)) 50%,
+    var(--color-motif-accent) 56%,
+    var(--color-motif-deep) 70%,
+    var(--color-welcome-navy) 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 rgb(255 255 255 / 70%)) drop-shadow(0 6px 14px color-mix(in srgb, var(--color-welcome-navy) 18%, transparent));
+}
+
+
+/* ==========================================================================
+   Plain mode — colorful pass
+   Brings the full motif palette (teal, aqua, peach, coral, blush) into the
+   backdrop, card border, typography, date and progress bar.
+   ========================================================================== */
+
+@property --ls-hue-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.loading-screen--plain {
+  --ls-c-teal: var(--color-motif-accent);
+  --ls-c-aqua: var(--color-motif-medium);
+  --ls-c-sky: var(--color-motif-teal-light);
+  --ls-c-peach: var(--color-motif-yellow);
+  --ls-c-coral: var(--color-motif-blush);
+  --ls-c-deep: var(--color-welcome-navy);
+  --ls-spectrum: var(--ls-c-teal), var(--ls-c-aqua), var(--ls-c-peach), var(--ls-c-coral), var(--ls-c-teal);
+}
+
+/* Warmer, livelier backdrop: brighter orbs */
+.loading-screen--plain .invite-plain-atmosphere__base {
+  background:
+    radial-gradient(70% 50% at 12% 8%, color-mix(in srgb, var(--ls-c-peach) 38%, transparent) 0%, transparent 70%),
+    radial-gradient(70% 50% at 90% 92%, color-mix(in srgb, var(--ls-c-aqua) 40%, transparent) 0%, transparent 70%),
+    linear-gradient(160deg, var(--color-motif-soft) 0%, var(--color-welcome-bg-soft) 50%, var(--color-motif-cream) 100%);
+}
+
+.loading-screen--plain .invite-plain-atmosphere__blob {
+  opacity: 0.55;
+}
+
+/* Glow tinted warm at the top, cool at the bottom */
+.loading-screen--plain .ls-plain-glow {
+  background:
+    radial-gradient(55% 42% at 50% 46%, color-mix(in srgb, white 65%, transparent) 0%, transparent 70%),
+    radial-gradient(60% 40% at 50% -5%, color-mix(in srgb, var(--ls-c-peach) 40%, transparent) 0%, transparent 70%),
+    radial-gradient(80% 60% at 50% 110%, color-mix(in srgb, var(--ls-c-aqua) 45%, transparent) 0%, transparent 70%);
+}
+
+/* Multi-colored motes; every third one is a tumbling petal */
+.loading-screen--plain .ls-plain-mote {
+  background: radial-gradient(circle, color-mix(in srgb, white 70%, var(--c)) 0%, var(--c) 75%);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--c) 70%, transparent);
+  animation-name: ls-plain-mote-rise-spin;
+}
+
+.loading-screen--plain .ls-plain-mote--petal {
+  width: calc(var(--size) * 1.6);
+  height: calc(var(--size) * 2.2);
+  border-radius: 80% 0 80% 0;
+  background: linear-gradient(135deg, color-mix(in srgb, white 45%, var(--c)) 0%, var(--c) 100%);
+  box-shadow: none;
+}
+
+@keyframes ls-plain-mote-rise-spin {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  12% { opacity: 0.9; }
+  80% { opacity: 0.65; }
+  100% { transform: translate3d(var(--drift), -105vh, 0) rotate(var(--spin)); opacity: 0; }
+}
+
+/* Card: rotating spectrum border around the arch */
+.loading-screen--plain .loading-screen__save-date {
+  border: 2px solid transparent;
+  background:
+    radial-gradient(90% 45% at 50% 0%, color-mix(in srgb, white 75%, transparent) 0%, transparent 70%) padding-box,
+    radial-gradient(70% 30% at 50% 100%, color-mix(in srgb, var(--ls-c-peach) 22%, transparent) 0%, transparent 75%) padding-box,
+    linear-gradient(180deg, var(--color-motif-soft) 0%, color-mix(in srgb, var(--ls-c-sky) 16%, var(--color-motif-soft)) 55%, color-mix(in srgb, var(--ls-c-coral) 14%, var(--color-motif-soft)) 100%) padding-box,
+    conic-gradient(from var(--ls-hue-angle), var(--ls-spectrum)) border-box;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 80%) inset,
+    0 30px 60px -30px color-mix(in srgb, var(--ls-c-coral) 55%, transparent),
+    0 10px 30px -14px color-mix(in srgb, var(--ls-c-teal) 45%, transparent);
+  animation:
+    ls-plain-card-in 1.3s cubic-bezier(0.22, 1, 0.36, 1) backwards,
+    ls-plain-hue-spin 12s linear infinite;
+}
+
+@keyframes ls-plain-hue-spin {
+  to { --ls-hue-angle: 360deg; }
+}
+
+.loading-screen--plain .loading-screen__save-date::before {
+  border-color: color-mix(in srgb, var(--ls-c-peach) 65%, transparent);
+}
+
+.loading-screen--plain .loading-screen__save-date::after {
+  border-color: color-mix(in srgb, var(--ls-c-aqua) 45%, transparent);
+}
+
+.loading-screen--plain .loading-screen__std-kicker {
+  color: var(--ls-c-coral);
+}
+
+.loading-screen--plain .loading-screen__std-eyebrow,
+.loading-screen--plain .loading-screen__std-venue-time {
+  color: var(--ls-c-coral);
+}
+
+/* Date: colored hairlines, teal month, coral year, spectrum day */
+.loading-screen--plain .ls-silk-date__weekday {
+  color: var(--ls-c-teal);
+}
+
+.loading-screen--plain .ls-silk-date__weekday::before {
+  background: linear-gradient(90deg, transparent, var(--ls-c-aqua), var(--ls-c-peach));
+}
+
+.loading-screen--plain .ls-silk-date__weekday::after {
+  background: linear-gradient(90deg, var(--ls-c-peach), var(--ls-c-coral), transparent);
+}
+
+.loading-screen--plain .ls-silk-date__side:first-child {
+  color: var(--ls-c-teal);
+  border-image: linear-gradient(90deg, transparent, var(--ls-c-aqua)) 1;
+}
+
+.loading-screen--plain .ls-silk-date__side:last-child {
+  color: var(--ls-c-coral);
+  border-image: linear-gradient(90deg, var(--ls-c-coral), transparent) 1;
+}
+
+.loading-screen--plain .ls-silk-date__day {
+  background: linear-gradient(
+    100deg,
+    var(--ls-c-deep) 0%,
+    var(--ls-c-teal) 20%,
+    var(--ls-c-aqua) 35%,
+    var(--ls-c-peach) 50%,
+    var(--ls-c-coral) 65%,
+    var(--ls-c-teal) 82%,
+    var(--ls-c-deep) 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter:
+    drop-shadow(0 1px 0 rgb(255 255 255 / 75%))
+    drop-shadow(0 6px 14px color-mix(in srgb, var(--ls-c-coral) 28%, transparent));
+}
+
+/* Divider + status */
+.loading-screen--plain .loading-screen__std-rule {
+  background: linear-gradient(90deg, transparent, var(--ls-c-aqua), var(--ls-c-peach), var(--ls-c-coral), transparent);
+}
+
+.loading-screen--plain .loading-screen__std-status {
+  color: var(--ls-c-teal);
+}
+
+/* Progress: full spectrum fill with a coral leading glow */
+.loading-screen--plain .loading-screen__std-track {
+  height: 3px;
+  background: color-mix(in srgb, var(--ls-c-sky) 40%, transparent);
+}
+
+.loading-screen--plain .loading-screen__std-bar {
+  background: linear-gradient(90deg, var(--ls-c-teal), var(--ls-c-aqua) 35%, var(--ls-c-peach) 70%, var(--ls-c-coral));
+}
+
+.loading-screen--plain .ls-plain-progress-glow {
+  background: var(--ls-c-coral);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--color-motif-soft) 85%, transparent),
+    0 0 14px 3px color-mix(in srgb, var(--ls-c-coral) 60%, transparent),
+    0 0 24px 6px color-mix(in srgb, var(--ls-c-peach) 35%, transparent);
+}
+
+/* Reduced motion: colors stay, movement stops */
+.loading-screen--plain.is-reduced-motion .loading-screen__save-date {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen--plain .loading-screen__save-date {
+    animation: none;
+  }
+}
+
+
+/* ==========================================================================
+   Plain mode — "SAVE the DATE" lockup + date entrance
+   SAVE / DATE: Cinzel capitals that rise in letter by letter.
+   "the": coral script that writes itself in between them.
+   Date: day rises out of a soft blur with one light sweep → month & year glide out from the
+   day → weekday hairlines draw outward.
+   ========================================================================== */
+
+/* ---- Headline lockup ---- */
+.loading-screen--plain .ls-headline {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 0.18em;
+  margin: 0;
+  font-family: var(--font-cinzel, "Cinzel", serif);
+  font-size: clamp(1.85rem, 8.4vw, 2.9rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ls-c-deep);
+  /* gradient-filled glyphs: lift with drop-shadow, not text-shadow (it would paint over the fill) */
+  text-shadow: none;
+  perspective: 600px;
+}
+
+.ls-headline__word {
+  display: inline-flex;
+}
+
+.ls-headline__letter {
+  display: inline-block;
+  background: linear-gradient(180deg, var(--ls-c-teal) 0%, var(--ls-c-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 rgb(255 255 255 / 80%));
+  opacity: 0;
+  transform-origin: 50% 100%;
+  animation: ls-letter-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--ls-delay, 0ms) forwards;
+}
+
+@keyframes ls-letter-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0.55em) rotateX(-75deg) scale(0.9);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: drop-shadow(0 1px 0 rgb(255 255 255 / 80%));
+  }
+}
+
+/* "the" — coral script, written in left to right */
+.ls-headline__script {
+  display: inline-block;
+  position: relative;
+  /* raised to sit between the capitals' midline and cap height */
+  top: -0.12em;
+  margin: -0.25em 0.02em;
+  padding: 0 0.14em 0.1em;
+  font-family: var(--font-brittany), cursive;
+  font-size: 1.5em;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  background: linear-gradient(100deg, var(--ls-c-coral) 0%, var(--ls-c-peach) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  clip-path: inset(-20% 100% -20% 0);
+  animation: ls-script-write 1.1s cubic-bezier(0.65, 0, 0.35, 1) var(--ls-delay, 0ms) forwards;
+}
+
+@keyframes ls-script-write {
+  to { clip-path: inset(-20% -10% -20% 0); }
+}
+
+/* ---- Countdown kicker: plain line under the lockup, spaced from the invitation wording ---- */
+.loading-screen--plain .loading-screen__std-kicker {
+  margin-top: 0.75rem;
+  margin-bottom: 1.1rem;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+/* ---- Date: reset the older fade so each part gets its own entrance ---- */
+.loading-screen--plain .ls-silk-date__weekday,
+.loading-screen--plain .ls-silk-date__side,
+.loading-screen--plain .ls-silk-date__day {
+  transform: none;
+  transition: none;
+}
+
+/* Day: digits rise slowly out of a soft blur, then one quiet light sweep */
+.loading-screen--plain .ls-silk-date__day {
+  position: relative;
+  display: inline-flex;
+  opacity: 1;
+  background: none;
+  color: inherit;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  animation: none;
+}
+
+.ls-silk-date__digit {
+  display: inline-block;
+}
+
+.ls-silk-date__digit-inner {
+  display: inline-block;
+  /* solid ink with a narrow highlight band parked off to the right */
+  background: linear-gradient(
+    105deg,
+    var(--ls-date-ink) 0%,
+    var(--ls-date-ink) 42%,
+    color-mix(in srgb, var(--ls-date-ink) 35%, white) 50%,
+    var(--ls-date-ink) 58%,
+    var(--ls-date-ink) 100%
+  );
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  transform: translateY(0.18em) scale(1.06);
+  filter: blur(10px);
+}
+
+.ls-silk-date__day.is-visible .ls-silk-date__digit-inner {
+  animation:
+    ls-digit-rise 1.8s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--ls-delay, 0ms) + var(--i) * 220ms) forwards,
+    ls-digit-sheen 1.6s cubic-bezier(0.45, 0, 0.25, 1) calc(var(--ls-delay, 0ms) + 1500ms + var(--i) * 120ms) forwards;
+}
+
+@keyframes ls-digit-rise {
+  0% { opacity: 0; transform: translateY(0.18em) scale(1.06); filter: blur(10px); }
+  55% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes ls-digit-sheen {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
+
+/* Month & year: glide out from beside the day, hairlines draw outward */
+.loading-screen--plain .ls-silk-date__side {
+  position: relative;
+  border-block: 0;
+  border-image: none;
+  opacity: 0;
+}
+
+.loading-screen--plain .ls-silk-date__side::before,
+.loading-screen--plain .ls-silk-date__side::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: scaleX(0);
+}
+
+.loading-screen--plain .ls-silk-date__side::before { top: 0; }
+.loading-screen--plain .ls-silk-date__side::after { bottom: 0; }
+
+.loading-screen--plain .ls-silk-date__side--month::before,
+.loading-screen--plain .ls-silk-date__side--month::after {
+  background: linear-gradient(90deg, transparent, var(--ls-date-line));
+  transform-origin: right center;
+}
+
+.loading-screen--plain .ls-silk-date__side--year::before,
+.loading-screen--plain .ls-silk-date__side--year::after {
+  background: linear-gradient(90deg, var(--ls-date-line), transparent);
+  transform-origin: left center;
+}
+
+.loading-screen--plain .ls-silk-date__side--month.is-visible {
+  animation: ls-side-from-right 1.5s cubic-bezier(0.16, 1, 0.3, 1) var(--ls-delay, 0ms) forwards;
+}
+
+.loading-screen--plain .ls-silk-date__side--year.is-visible {
+  animation: ls-side-from-left 1.5s cubic-bezier(0.16, 1, 0.3, 1) var(--ls-delay, 0ms) forwards;
+}
+
+.loading-screen--plain .ls-silk-date__side.is-visible::before,
+.loading-screen--plain .ls-silk-date__side.is-visible::after {
+  animation: ls-line-draw 1.4s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--ls-delay, 0ms) + 250ms) forwards;
+}
+
+@keyframes ls-side-from-right {
+  from { opacity: 0; transform: translateX(18%); filter: blur(5px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes ls-side-from-left {
+  from { opacity: 0; transform: translateX(-18%); filter: blur(5px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes ls-line-draw {
+  to { transform: scaleX(1); }
+}
+
+/* Weekday: letters settle from wide spacing; hairlines grow out from the text */
+.loading-screen--plain .ls-silk-date__weekday {
+  opacity: 0;
+}
+
+.loading-screen--plain .ls-silk-date__weekday::before,
+.loading-screen--plain .ls-silk-date__weekday::after {
+  transform: scaleX(0);
+}
+
+.loading-screen--plain .ls-silk-date__weekday::before { transform-origin: right center; }
+.loading-screen--plain .ls-silk-date__weekday::after { transform-origin: left center; }
+
+.loading-screen--plain .ls-silk-date__weekday.is-visible {
+  animation: ls-weekday-in 1s cubic-bezier(0.22, 1, 0.36, 1) var(--ls-delay, 0ms) forwards;
+}
+
+.loading-screen--plain .ls-silk-date__weekday.is-visible::before,
+.loading-screen--plain .ls-silk-date__weekday.is-visible::after {
+  animation: ls-line-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--ls-delay, 0ms) + 300ms) forwards;
+}
+
+@keyframes ls-weekday-in {
+  from { opacity: 0; letter-spacing: 0.9em; filter: blur(3px); }
+  to { opacity: 1; letter-spacing: 0.42em; filter: none; }
+}
+
+/* ---- Reduced motion: everything shown in its final state ---- */
+.loading-screen--plain.is-reduced-motion .ls-headline__letter,
+.loading-screen--plain.is-reduced-motion .ls-headline__script,
+.loading-screen--plain.is-reduced-motion .ls-silk-date__digit-inner,
+.loading-screen--plain.is-reduced-motion .ls-silk-date__side,
+.loading-screen--plain.is-reduced-motion .ls-silk-date__side::before,
+.loading-screen--plain.is-reduced-motion .ls-silk-date__side::after,
+.loading-screen--plain.is-reduced-motion .ls-silk-date__weekday,
+.loading-screen--plain.is-reduced-motion .ls-silk-date__weekday::before,
+.loading-screen--plain.is-reduced-motion .ls-silk-date__weekday::after {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-headline__letter,
+  .ls-headline__script,
+  .ls-silk-date__digit-inner,
+  .loading-screen--plain .ls-silk-date__side,
+  .loading-screen--plain .ls-silk-date__side::before,
+  .loading-screen--plain .ls-silk-date__side::after,
+  .loading-screen--plain .ls-silk-date__weekday,
+  .loading-screen--plain .ls-silk-date__weekday::before,
+  .loading-screen--plain .ls-silk-date__weekday::after {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    filter: none;
+  }
+}
+
+
+/* ---- Plain mode: plain-colored date, lower headline, smoother entrance ---- */
+
+/* The whole date in one solid ink (edit these two to recolor it) */
+.loading-screen--plain {
+  --ls-date-ink: var(--color-welcome-navy);
+  --ls-date-line: color-mix(in srgb, var(--color-motif-accent) 55%, transparent);
+}
+
+.loading-screen--plain .ls-silk-date__weekday,
+.loading-screen--plain .ls-silk-date__side,
+.loading-screen--plain .ls-silk-date__side:first-child,
+.loading-screen--plain .ls-silk-date__side:last-child {
+  color: var(--ls-date-ink);
+}
+
+.loading-screen--plain .ls-silk-date__weekday::before {
+  background: linear-gradient(90deg, transparent, var(--ls-date-line));
+}
+
+.loading-screen--plain .ls-silk-date__weekday::after {
+  background: linear-gradient(90deg, var(--ls-date-line), transparent);
+}
+
+.loading-screen--plain .ls-silk-date__day {
+  filter: drop-shadow(0 1px 0 rgb(255 255 255 / 80%));
+}
+
+/* Headline sits lower in the arch, with breathing room under the ornament */
+.loading-screen--plain .loading-screen__save-date header {
+  padding-top: clamp(3.6rem, 13vh, 5.75rem);
+}
+
+.loading-screen--plain .loading-screen__plain-ornament {
+  margin-bottom: 0.85rem;
+}
+
+/* Ornament unfurls from its centre (no filter in the keyframes, so the motif tint stays) */
+.ls-ornament-in {
+  opacity: 0;
+  transform: scaleX(0.2) translateY(6px);
+  animation: ls-ornament-unfurl 1.1s cubic-bezier(0.22, 1, 0.36, 1) var(--ls-delay, 0ms) forwards;
+}
+
+@keyframes ls-ornament-unfurl {
+  to { opacity: 1; transform: none; }
+}
+
+/* Couple names are written in left to right */
+.loading-screen--plain .loading-screen__std-names {
+  clip-path: inset(-10% 100% -10% 0);
+  animation: ls-names-write 1.6s cubic-bezier(0.65, 0, 0.35, 1) var(--ls-delay, 0ms) forwards;
+}
+
+@keyframes ls-names-write {
+  to { clip-path: inset(-10% -2% -10% 0); }
+}
+
+/* Reduced motion */
+.loading-screen--plain.is-reduced-motion .ls-ornament-in,
+.loading-screen--plain.is-reduced-motion .loading-screen__std-names {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ls-ornament-in,
+  .loading-screen--plain .loading-screen__std-names {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+}
+
+
+/* ---- Plain mode: circle pattern background (components/loader/PlainBubbles) ---- */
+
+/* The pattern paints its own base; hide the blurred orbs and frosting beneath it */
+.loading-screen--plain .invite-plain-atmosphere__blobs,
+.loading-screen--plain .invite-plain-atmosphere__frost {
+  display: none;
+}
+
+/* Soften the light behind the card so the pattern reads cleanly */
+.loading-screen--plain .ls-plain-glow {
+  background: radial-gradient(50% 40% at 50% 48%, color-mix(in srgb, white 35%, transparent) 0%, transparent 70%);
+}
+
+
+/* ---- Plain mode: handoff to the envelope hero ----
+   The card tucks down and away (as if slipping into the envelope) while a soft
+   light blooms behind it; the hero then fades in over the identical pattern. */
+
+.loading-screen--plain.is-fading .loading-screen__save-date {
+  opacity: 1;
+  transition: none;
+  animation: ls-card-tuck 0.95s cubic-bezier(0.55, 0, 0.3, 1) forwards;
+}
+
+@keyframes ls-card-tuck {
+  0% { opacity: 1; transform: none; filter: none; }
+  30% { opacity: 1; transform: translateY(-1.5%) scale(1.015); }
+  100% { opacity: 0; transform: translateY(9%) scale(0.7); filter: blur(6px); }
+}
+
+.loading-screen--plain.is-fading .ls-plain-glow {
+  animation: ls-handoff-bloom 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes ls-handoff-bloom {
+  0% { opacity: 0.8; transform: scale(1); }
+  45% { opacity: 1; transform: scale(1.35); }
+  100% { opacity: 0.6; transform: scale(1.6); }
+}
+
+/* Petals settle out with the card; the corner leaves stay put — the envelope
+   hero shows identical corners in the same spot */
+.loading-screen--plain.is-fading .ls-plain-motes {
+  opacity: 0;
+  transition: opacity 0.9s ease 0.2s;
+}
+
+.loading-screen--plain.is-fading.is-reduced-motion .loading-screen__save-date {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen--plain.is-fading .loading-screen__save-date {
+    animation: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .loading-screen--plain.is-fading .ls-plain-glow {
+    animation: none;
+  }
+}
+
+
+/* ---- Plain mode: solid text colors inside the invitation card (no gradient fills) ----
+   Overrides the foil / glint gradients above; colors come from app/globals.css. */
+.loading-screen--plain .ls-silk-date__day,
+.loading-screen--plain .ls-silk-date__digit-inner,
+.loading-screen--plain .ls-headline__letter,
+.loading-screen--plain .ls-headline__script {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+}
+
+.loading-screen--plain .ls-silk-date__day,
+.loading-screen--plain .ls-silk-date__digit-inner,
+.loading-screen--plain .ls-headline__letter {
+  color: var(--color-welcome-navy);
+}
+
+.loading-screen--plain .ls-headline__script {
+  color: var(--color-welcome-script);
+}
+
+/* ==========================================================================
+   Love story / message — flat palette colors (no gradients) for readability.
+   Light chapters: solid light card, teal text. Dark chapters: solid teal card,
+   light text. One plain background behind everything. Kept last so it wins.
+   ========================================================================== */
+/* Transparent so the section's circle pattern (PlainBubbles) shows through */
+.love-story-plain-track,
+.love-story-plain-track--theme-light,
+.love-story-plain-track--theme-dark {
+  background: transparent;
+}
+
+.love-story-plain-track .story-plain-atmosphere {
+  display: none;
+}
+
+.love-story-plain-track::before {
+  background: color-mix(in srgb, var(--color-welcome-navy) 25%, transparent);
+}
+
+.love-story-plain-track--first::before,
+.love-story-plain-track--last::before {
+  background: color-mix(in srgb, var(--color-welcome-navy) 25%, transparent);
+}
+
+.story-plain-card {
+  border: 1px solid color-mix(in srgb, var(--color-welcome-navy) 20%, transparent);
+  background: var(--color-motif-soft);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 14px 32px -18px color-mix(in srgb, var(--color-welcome-navy) 45%, transparent);
+}
+
+.story-plain-card--dark {
+  border-color: var(--color-welcome-navy);
+  background: var(--color-welcome-navy);
+  box-shadow: 0 14px 32px -18px color-mix(in srgb, var(--color-welcome-navy) 70%, transparent);
+}
+
+.story-plain-card__frost {
+  display: none;
+}
+
+.story-plain-card .wedding-frame-inner {
+  border-color: color-mix(in srgb, var(--color-welcome-navy) 18%, transparent);
+}
+
+.story-plain-card--dark .wedding-frame-inner {
+  border-color: color-mix(in srgb, var(--color-motif-soft) 30%, transparent);
+}
+
+.story-plain-card__dot {
+  background: var(--color-romantic-coral);
+  box-shadow: 0 0 0 4px var(--color-motif-soft);
+}
+
+.love-story-plain-track--theme-dark .story-plain-card__dot {
+  box-shadow: 0 0 0 4px var(--color-motif-soft);
+}
+
+.story-plain-chapter-label {
+  color: var(--color-romantic-coral);
+}
+
+.story-plain-card--dark .story-plain-chapter-label {
+  color: var(--color-motif-blush);
+}
+
+.story-plain-chapter-line {
+  background: color-mix(in srgb, var(--color-welcome-navy) 22%, transparent);
+}
+
+.story-plain-chapter-line--dark {
+  background: color-mix(in srgb, var(--color-motif-soft) 35%, transparent);
+}
+
+.story-plain-chapter-connector__stem {
+  background: color-mix(in srgb, var(--color-welcome-navy) 30%, transparent);
+}
+
+/* ---- Couple names set in type: nickname (The Seasons) · "and" (Above the Beyond) · nickname ---- */
+.loading-screen__std-names--text,
+.loading-screen--plain .loading-screen__std-names--text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+  max-width: 94%;
+  aspect-ratio: auto;
+  margin: 0 auto;
+  padding: 0.1em 0.35em;
+  -webkit-mask-image: none;
+  mask-image: none;
+  background: none;
+  text-align: center;
+  font-weight: 400;
+}
+
+/* Each word clips the gradient itself so the script "and" is always filled */
+.ls-names__nick,
+.ls-names__and {
+  display: block;
+  padding: 0 0.15em;
+  background: linear-gradient(
+    118deg,
+    var(--couple-name-fill, var(--color-welcome-navy)) 0%,
+    var(--couple-name-fill-mid, var(--color-motif-deep)) 48%,
+    var(--couple-name-fill-accent, var(--color-welcome-heading)) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__nick,
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__and {
+  background: var(--couple-name-fill-soft, var(--color-motif-soft));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.ls-names__nick {
+  font-size: clamp(2.6rem, 12vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: 0.06em;
+}
+
+.ls-names__and {
+  margin: -0.2em 0 -0.1em;
+  font-size: clamp(1.5rem, 6.5vw, 2.4rem);
+  line-height: 1.15;
+}
+
+/* Script "and" in the motif accent so it stands apart from the names */
+.ls-names__and,
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__and {
+  background: none;
+  color: var(--color-motif-accent);
+  -webkit-text-fill-color: var(--color-motif-accent);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__and {
+  color: var(--color-motif-medium);
+  -webkit-text-fill-color: var(--color-motif-medium);
+}
+
+/* ---- Readability: darker ink for all loader text (plain mode). Kept last so it wins. ---- */
+.loading-screen--plain {
+  /* Shared invitation roles (app/globals.css → --invite-*) */
+  --ls-text-dark: var(--invite-ink);
+  --ls-text-accent-dark: var(--invite-title);
+  --ls-text-highlight: var(--invite-script);
+}
+
+.loading-screen--plain .loading-screen__std-venue-name,
+.loading-screen--plain .loading-screen__std-copy,
+.loading-screen--plain .loading-screen__plain-line,
+.loading-screen--plain .ls-silk-date__side:first-child {
+  color: var(--ls-text-dark);
+  -webkit-text-fill-color: var(--ls-text-dark);
+}
+
+.loading-screen--plain .loading-screen__std-kicker,
+.loading-screen--plain .loading-screen__std-eyebrow,
+.loading-screen--plain .loading-screen__std-venue-time,
+.loading-screen--plain .loading-screen__std-status,
+.loading-screen--plain .ls-silk-date__weekday,
+.loading-screen--plain .ls-silk-date__side:last-child {
+  color: var(--ls-text-accent-dark);
+  -webkit-text-fill-color: var(--ls-text-accent-dark);
+}
+
+.loading-screen--plain .ls-names__nick {
+  background: none;
+}
+
+/* Switched pair: "Save" / "Date" and the couple names dark; "the" and "and" light */
+.loading-screen--plain .ls-headline__letter,
+.loading-screen--plain .ls-names__nick {
+  color: var(--ls-text-accent-dark);
+  -webkit-text-fill-color: var(--ls-text-accent-dark);
+}
+
+/* Highlights — "the", "and" and the day number (globals.css → --color-highlight-deep) */
+.loading-screen--plain .ls-headline__script,
+.loading-screen--plain .ls-names__and,
+.loading-screen--plain .ls-silk-date__day,
+.loading-screen--plain .ls-silk-date__digit-inner {
+  color: var(--ls-text-highlight);
+  -webkit-text-fill-color: var(--ls-text-highlight);
+}
+
+
+/* Top ornament above "Save the Date" — nudged slightly up */
+.loading-screen--plain .loading-screen__plain-ornament {
+  margin-top: -0.75rem;
+}
+
+
+/* ==========================================================================
+   Plain mode — "sky & garden" card. Kept last so it wins.
+   Paper: clean white fading to a soft sky at the foot (no yellow/sage mixing).
+   Ink: navy titles, warm-gray details, sage-green script echoing the leaves.
+   Sunshine yellow is used once — the glowing dot on the progress bar.
+   ========================================================================== */
+.loading-screen--plain {
+  --ls-sky: var(--color-motif-medium);          /* #C5BDB5 */
+  --ls-blue: var(--color-welcome-heading);      /* #44413C */
+  --ls-navy: var(--color-welcome-navy);         /* #44413C */
+  --ls-ink: var(--color-welcome-text);          /* #44413C */
+  --ls-leaf: var(--color-motif-yellow);         /* #C5BDB5 sage */
+  --ls-leaf-ink: color-mix(in srgb, var(--color-motif-yellow) 78%, #44413C);
+  --ls-sun: var(--color-motif-accent);          /* #44413C */
+
+  --ls-text-dark: var(--ls-ink);
+  --ls-text-accent-dark: var(--ls-blue);
+  --ls-text-highlight: var(--ls-leaf-ink);
+  --ls-date-ink: var(--ls-navy);
+  --ls-date-line: color-mix(in srgb, var(--ls-leaf) 70%, transparent);
+}
+
+/* Paper + a calm sky-blue rim instead of the rotating spectrum */
+.loading-screen--plain .loading-screen__save-date {
+  border: 1.5px solid transparent;
+  background:
+    radial-gradient(85% 38% at 50% 0%, rgb(255 255 255 / 95%) 0%, transparent 72%) padding-box,
+    linear-gradient(
+      180deg,
+      #FFFFFF 0%,
+      var(--color-motif-soft) 48%,
+      color-mix(in srgb, var(--ls-sky) 20%, white) 100%
+    ) padding-box,
+    linear-gradient(180deg, rgb(255 255 255 / 95%) 0%, color-mix(in srgb, var(--ls-sky) 75%, white) 100%) border-box;
+  box-shadow:
+    0 0 0 6px rgb(255 255 255 / 35%),
+    0 30px 60px -28px color-mix(in srgb, var(--ls-navy) 45%, transparent),
+    0 12px 28px -16px color-mix(in srgb, var(--ls-blue) 35%, transparent);
+  animation: ls-plain-card-in 1.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Double inner frame: warm gray, then a fine sage line */
+.loading-screen--plain .loading-screen__save-date::before {
+  border-color: color-mix(in srgb, var(--ls-blue) 32%, transparent);
+}
+
+.loading-screen--plain .loading-screen__save-date::after {
+  border-color: color-mix(in srgb, var(--ls-leaf) 40%, transparent);
+}
+
+/* Headline + names: navy capitals, sage script joining words */
+.loading-screen--plain .ls-headline__letter,
+.loading-screen--plain .ls-names__nick {
+  color: var(--ls-navy);
+  -webkit-text-fill-color: var(--ls-navy);
+}
+
+.loading-screen--plain .ls-headline__script,
+.loading-screen--plain .ls-names__and {
+  color: var(--ls-leaf-ink);
+  -webkit-text-fill-color: var(--ls-leaf-ink);
+}
+
+/* Small caps details in warm gray; italic lines in body ink */
+.loading-screen--plain .loading-screen__std-kicker,
+.loading-screen--plain .loading-screen__std-eyebrow,
+.loading-screen--plain .loading-screen__std-venue-time,
+.loading-screen--plain .loading-screen__std-status,
+.loading-screen--plain .ls-silk-date__weekday {
+  color: var(--ls-blue);
+  -webkit-text-fill-color: var(--ls-blue);
+}
+
+/* Date: navy month & year, warm-gray day, sage hairlines */
+.loading-screen--plain .ls-silk-date__side,
+.loading-screen--plain .ls-silk-date__side:first-child,
+.loading-screen--plain .ls-silk-date__side:last-child {
+  color: var(--ls-navy);
+  -webkit-text-fill-color: var(--ls-navy);
+}
+
+.loading-screen--plain .ls-silk-date__day,
+.loading-screen--plain .ls-silk-date__digit-inner {
+  color: var(--ls-blue);
+  -webkit-text-fill-color: var(--ls-blue);
+}
+
+/* Divider: sky with a sage centre */
+.loading-screen--plain .loading-screen__std-rule {
+  background: linear-gradient(90deg, transparent, var(--ls-sky), var(--ls-leaf), var(--ls-sky), transparent);
+}
+
+/* Progress: sky track, sky → warm gray fill, sunshine dot */
+.loading-screen--plain .loading-screen__std-track {
+  background: color-mix(in srgb, var(--ls-sky) 35%, transparent);
+}
+
+.loading-screen--plain .loading-screen__std-bar {
+  background: linear-gradient(90deg, var(--ls-sky), var(--ls-blue));
+}
+
+.loading-screen--plain .ls-plain-progress-glow {
+  background: var(--ls-sun);
+  box-shadow:
+    0 0 0 3px rgb(255 255 255 / 90%),
+    0 0 14px 3px color-mix(in srgb, var(--ls-sun) 55%, transparent);
+}
+
+/* Soft white light behind the card so it lifts off the video */
+.loading-screen--plain .ls-plain-glow {
+  background: radial-gradient(55% 45% at 50% 50%, rgb(255 255 255 / 45%) 0%, transparent 70%);
+}
+
+
+/* ==========================================================================
+   Home hero (plain) over the looping video — readability pass. Kept last.
+   A strong white halo sits behind the text block; every line uses a dark
+   ink from the palette (navy / warm gray) with a tight white edge, so it
+   holds up over bright frames. Sage + sunshine appear only as accents.
+   ========================================================================== */
+.home-hero--plain {
+  --hh-navy: var(--color-welcome-navy);       /* #44413C */
+  --hh-blue: var(--color-welcome-heading);    /* #44413C */
+  --hh-ink: var(--color-welcome-text);        /* #44413C */
+  --hh-sky: var(--color-motif-medium);        /* #C5BDB5 */
+  --hh-leaf: var(--color-motif-yellow);       /* #C5BDB5 */
+  --hh-butter: var(--color-motif-silver);     /* #D9A08C */
+  /* Tight white edge: keeps thin strokes crisp instead of washing them out */
+  --hh-edge:
+    0 0 1px rgb(255 255 255 / 100%),
+    0 0 4px rgb(255 255 255 / 90%),
+    0 0 14px rgb(255 255 255 / 60%);
+}
+
+/* Strong white halo behind the whole title block */
+.home-hero--plain .home-hero-title-glow {
+  width: min(46rem, 130%);
+  height: min(34rem, 125vw);
+  top: 70%;
+  background: radial-gradient(
+    ellipse at center,
+    rgb(255 255 255 / 88%) 0%,
+    rgb(255 255 255 / 70%) 38%,
+    rgb(255 255 255 / 30%) 58%,
+    transparent 74%
+  );
+  filter: blur(10px);
+}
+
+/* "YOU'RE" — navy; "Invited!" — warm gray script */
+.home-hero--plain .home-hero-title-main {
+  color: var(--hh-navy);
+  text-shadow: var(--hh-edge);
+}
+
+.home-hero--plain .home-hero-title-script {
+  color: var(--hh-blue);
+  text-shadow: var(--hh-edge);
+}
+
+/* Eyebrow: warm-gray ink, bold, sage hairlines only where there is room */
+.home-hero--plain .home-hero-eyebrow {
+  color: var(--hh-ink);
+  font-weight: 700;
+  text-shadow: var(--hh-edge);
+}
+
+@media (min-width: 640px) {
+  .home-hero--plain .home-hero-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75em;
+  }
+
+  .home-hero--plain .home-hero-eyebrow::before,
+  .home-hero--plain .home-hero-eyebrow::after {
+    content: "";
+    flex: 0 0 2.5rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hh-leaf));
+  }
+
+  .home-hero--plain .home-hero-eyebrow::after {
+    background: linear-gradient(90deg, var(--hh-leaf), transparent);
+  }
+}
+
+/* Date: navy with a hairline stroke so the thin serif reads at a glance */
+.home-hero--plain .home-hero-date {
+  color: var(--hh-navy);
+  -webkit-text-stroke: 0.6px var(--hh-navy);
+  text-shadow: var(--hh-edge);
+}
+
+/* Venue · time: navy, bold */
+.home-hero--plain .home-hero-meta {
+  color: var(--hh-navy);
+  font-weight: 700;
+  text-shadow: var(--hh-edge);
+}
+
+/* Countdown band: warm gray → navy, lighter at the top so the video
+   still shows through; sky/sage hairline above the heading */
+.home-hero--plain .home-hero-countdown-bar {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--hh-navy) 94%, transparent) 0%,
+    color-mix(in srgb, var(--hh-navy) 78%, var(--hh-blue)) 45%,
+    color-mix(in srgb, var(--hh-blue) 45%, transparent) 78%,
+    transparent 100%
+  );
+}
+
+.home-hero--plain .home-hero-countdown-bar > div::before {
+  content: "";
+  display: block;
+  width: min(14rem, 55%);
+  height: 1px;
+  margin: 0 auto 0.85rem;
+  background: linear-gradient(90deg, transparent, var(--hh-sky), var(--hh-leaf), var(--hh-sky), transparent);
+}
+
+.home-hero--plain .home-hero-countdown-heading {
+  color: #FFF8F2;
+  text-shadow: 0 1px 8px color-mix(in srgb, var(--hh-navy) 70%, transparent);
+}
+
+.home-hero--plain .home-hero-countdown-value {
+  color: #FFF8F2;
+  text-shadow: 0 2px 10px color-mix(in srgb, var(--hh-navy) 65%, transparent);
+}
+
+.home-hero--plain .home-hero-countdown-label {
+  color: var(--hh-butter);
+  text-shadow: none;
+}
+
+
+/* ---- Home hero: light mist + invitation-style details (overrides the pass above) ----
+   The mist is kept light and unblurred so the video stays visible; legibility
+   comes from dark ink, heavier weights and a crisp white edge on each line. */
+.home-hero--plain .home-hero-mist {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  z-index: -1;
+  width: min(40rem, 115vw);
+  height: min(36rem, 145vw);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgb(255 248 242 / 62%) 0%,
+    rgb(255 248 242 / 45%) 40%,
+    rgb(255 248 242 / 15%) 60%,
+    transparent 74%
+  );
+}
+
+.home-hero--plain .home-hero-title-glow {
+  display: none;
+}
+
+/* "We are getting married" — italic serif, navy */
+.home-hero--plain .home-hero-eyebrow {
+  font-family: "SortsMillGoudy", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--hh-navy);
+  text-shadow: var(--hh-edge);
+}
+
+/* Date, laid out like the printed card:
+        SUNDAY
+   ─ FEBRUARY ─  08  ─ 2027 ─        */
+.home-hero--plain .home-hero-date-weekday {
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  padding-left: 0.42em; /* balance trailing letter-spacing */
+  color: var(--hh-blue);
+  text-shadow: var(--hh-edge);
+}
+
+.home-hero--plain .home-hero-date-weekday::before,
+.home-hero--plain .home-hero-date-weekday::after {
+  content: "";
+  width: clamp(1.75rem, 8vw, 3rem);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--hh-leaf));
+}
+
+.home-hero--plain .home-hero-date-weekday::after {
+  background: linear-gradient(90deg, var(--hh-leaf), transparent);
+}
+
+.home-hero--plain .home-hero-date-side {
+  min-width: 6.5em;
+  padding: 0.45em 0;
+  border-block: 1px solid color-mix(in srgb, var(--hh-leaf) 75%, transparent);
+  text-align: center;
+  color: var(--hh-navy);
+  text-shadow: var(--hh-edge);
+}
+
+/* Day number: same Playfair Display numerals + terracotta as the loading screen date */
+.home-hero-date-day,
+.home-hero--plain .home-hero-date-day {
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3.4rem, 17vw, 5.4rem);
+  font-weight: 500;
+  font-variant-numeric: lining-nums proportional-nums;
+}
+
+.home-hero--plain .home-hero-date-day {
+  color: var(--hh-blue);
+  -webkit-text-fill-color: var(--hh-blue);
+  -webkit-text-stroke: 0;
+  filter: drop-shadow(0 1px 0 rgb(255 248 242 / 80%));
+}
+
+/* Time in spaced small caps, venue in italic serif */
+.home-hero--plain .home-hero-meta-time {
+  color: var(--hh-blue);
+  text-shadow: var(--hh-edge);
+}
+
+.home-hero--plain .home-hero-meta-venue {
+  font-family: "SortsMillGoudy", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  color: var(--hh-navy);
+  text-shadow: var(--hh-edge);
+}
+
+
+/* ---- Home hero: soft blur behind the text, centred block, lighter countdown band ---- */
+
+/* Gentle frosted blur only where the text sits; the mask fades it out so
+   the video stays sharp around the edges */
+.home-hero--plain .home-hero-mist {
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 70%);
+  mask-image: radial-gradient(ellipse at center, #000 40%, transparent 70%);
+}
+
+/* Countdown: shorter, lighter band hugging the bottom edge */
+.home-hero--plain .home-hero-countdown-bar {
+  padding-top: clamp(1.25rem, 4vh, 2.25rem);
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--hh-navy) 72%, transparent) 0%,
+    color-mix(in srgb, var(--hh-navy) 50%, transparent) 45%,
+    transparent 100%
+  );
+}
+
+.home-hero--plain .home-hero-countdown-bar > div {
+  padding-top: 0.5rem;
+  padding-bottom: 0.75rem;
+}
+
+.home-hero--plain .home-hero-countdown-bar > div::before {
+  margin-bottom: 0.6rem;
+}
+
+.home-hero--plain .home-hero-countdown-heading,
+.home-hero--plain .home-hero-countdown-value {
+  text-shadow:
+    0 1px 2px color-mix(in srgb, var(--hh-navy) 80%, transparent),
+    0 2px 12px color-mix(in srgb, var(--hh-navy) 70%, transparent);
+}
+
+.home-hero--plain .home-hero-countdown-label {
+  text-shadow: 0 1px 3px color-mix(in srgb, var(--hh-navy) 85%, transparent);
+}
+
+
+/* Home hero: no hairline ornament above the countdown */
+.home-hero--plain .home-hero-countdown-bar > div::before {
+  content: none;
+}
+
+/* ---- Love story: milestone photo inside each plain card ---- */
+.story-plain-photo {
+  padding: 0.5rem 0.5rem 1.4rem;
+  background: #FFFFFF;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--color-motif-medium) 40%, transparent),
+    0 14px 28px -14px color-mix(in srgb, var(--color-welcome-navy) 45%, transparent);
+  transition: transform 0.5s ease;
+}
+
+.story-plain-card:hover .story-plain-photo {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* Date / chapter line: warm gray on light cards, butter on navy cards */
+.story-plain-chapter-label {
+  color: var(--color-welcome-heading);
+  letter-spacing: 0.32em;
+  font-weight: 600;
+}
+
+.story-plain-card--dark .story-plain-chapter-label {
+  color: var(--color-motif-silver);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-plain-photo { transition: none; }
+}
+
+/* ---- Love story: open layout (no cards) — components/StorySection.tsx → PlainOpenChapter ---- */
+.story-open-photo {
+  padding: clamp(0.3rem, 1.2vw, 0.6rem) clamp(0.3rem, 1.2vw, 0.6rem) clamp(0.9rem, 3.5vw, 1.6rem);
+  background: #FFFFFF;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--color-motif-medium) 40%, transparent),
+    0 18px 34px -16px color-mix(in srgb, var(--color-welcome-navy) 45%, transparent);
+}
+
+.story-open-date {
+  margin: 0 0 0.4rem;
+  font-size: clamp(0.56rem, 2.3vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-welcome-heading);
+}
+
+.story-open-title {
+  margin: 0;
+  font-size: clamp(1.05rem, 4.6vw, 2.1rem);
+  line-height: 1.12;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-welcome-navy);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 80%);
+}
+
+.story-open-rule {
+  display: block;
+  width: clamp(2rem, 8vw, 3.5rem);
+  height: 1px;
+  margin: clamp(0.55rem, 2vw, 0.9rem) 0;
+  background: var(--color-motif-yellow);
+}
+
+/* Story body: Crimson Text (upright book serif) at a comfortable reading size */
+.story-open-text {
+  font-family: "Crimson Text", "Cormorant Garamond", Georgia, serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(0.875rem, 1vw + 0.6rem, 0.96875rem);
+  line-height: 1.7;
+  color: var(--color-welcome-text);
+  text-shadow: 0 0 8px rgb(255 255 255 / 70%);
+}
+
+.story-open-text p + p {
+  margin-top: 0.75rem;
+}
+
+/* Large faint chapter numeral behind each chapter's text — Playfair Display italic,
+   a different voice from the The Seasons titles */
+.story-open-number {
+  position: absolute;
+  top: -0.3em;
+  z-index: -1;
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-variant-numeric: lining-nums;
+  font-size: clamp(3.6rem, 16vw, 8rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--color-motif-medium) 34%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Special characters in love story text (&, _, dashes, ♡) — components lib/story-glyph-text.tsx */
+.story-glyph {
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.story-open-divider svg {
+  filter: drop-shadow(0 1px 0 rgb(255 248 242 / 80%));
+}
+
+/* Phones: slightly smaller body so long paragraphs sit comfortably beside the photo */
+
+
+
+/* ==========================================================================
+   Blush romance — loader (plain). Kept last so it wins.
+   Ivory card on pastel pink; burgundy only for the headline and names,
+   dusty rose script, rose-ink small caps, sage hairlines.
+   ========================================================================== */
+.loading-screen--plain {
+  --ls-blush: #D9A08C;
+  --ls-pastel: #FFF8F2;
+  --ls-ivory: #FFF8F2;
+  --ls-burgundy: #44413C;
+  --ls-rose: #44413C;
+  --ls-rose-ink: #44413C;
+  --ls-sage: #B97865;
+
+  --ls-sky: var(--ls-rose);
+  --ls-blue: var(--ls-rose-ink);
+  --ls-navy: var(--ls-burgundy);
+  --ls-ink: #44413C;
+  --ls-leaf: var(--ls-sage);
+  --ls-leaf-ink: var(--ls-rose);
+  --ls-sun: var(--ls-rose);
+  --ls-text-highlight: var(--ls-rose);
+  --ls-date-line: color-mix(in srgb, var(--ls-sage) 60%, transparent);
+  background: var(--ls-pastel);
+}
+
+.loading-screen--plain .loading-screen__save-date {
+  background:
+    radial-gradient(85% 38% at 50% 0%, rgb(255 248 242 / 90%) 0%, transparent 72%) padding-box,
+    linear-gradient(180deg, var(--ls-ivory) 0%, var(--ls-ivory) 55%, color-mix(in srgb, var(--ls-blush) 55%, var(--ls-ivory)) 100%) padding-box,
+    linear-gradient(180deg, rgb(255 248 242 / 95%) 0%, color-mix(in srgb, var(--ls-rose) 45%, #FFF8F2) 100%) border-box;
+  box-shadow:
+    0 0 0 6px rgb(255 248 242 / 45%),
+    0 30px 60px -30px color-mix(in srgb, var(--ls-burgundy) 22%, transparent),
+    0 10px 24px -16px color-mix(in srgb, var(--ls-rose) 40%, transparent);
+}
+
+.loading-screen--plain .loading-screen__save-date::before {
+  border-color: color-mix(in srgb, var(--ls-rose) 45%, transparent);
+}
+
+.loading-screen--plain .loading-screen__save-date::after {
+  border-color: color-mix(in srgb, var(--ls-sage) 40%, transparent);
+}
+
+.loading-screen--plain .ls-headline__script,
+.loading-screen--plain .ls-names__and {
+  color: var(--ls-rose);
+  -webkit-text-fill-color: var(--ls-rose);
+}
+
+.loading-screen--plain .loading-screen__plain-line,
+.loading-screen--plain .loading-screen__std-copy {
+  color: var(--ls-ink);
+}
+
+.loading-screen--plain .loading-screen__std-rule {
+  background: linear-gradient(90deg, transparent, var(--ls-blush), var(--ls-sage), var(--ls-blush), transparent);
+}
+
+.loading-screen--plain .loading-screen__std-track {
+  background: color-mix(in srgb, var(--ls-blush) 80%, transparent);
+}
+
+.loading-screen--plain .loading-screen__std-bar {
+  background: linear-gradient(90deg, var(--ls-blush), var(--ls-rose));
+}
+
+.loading-screen--plain .ls-plain-glow {
+  background: radial-gradient(55% 45% at 50% 50%, rgb(255 248 242 / 55%) 0%, transparent 70%);
+}
+
+/* Petals: fewer, softer */
+.loading-screen--plain .ls-plain-mote {
+  opacity: 0.55;
+}
+
+
+
+/* ==========================================================================
+   Blush romance — home hero (plain) with a single cover photograph.
+   Mobile: arched photo on top, invitation wording below.
+   Desktop: photo left, wording right.
+   ========================================================================== */
+.home-hero--plain {
+  --hh-navy: #44413C;
+  --hh-blue: #44413C;
+  --hh-ink: #44413C;
+  --hh-sky: #D9A08C;
+  --hh-leaf: #B97865;
+  --hh-butter: #D9A08C;
+  --hh-edge: none;
+  background: #FFF8F2;
+}
+
+.home-hero--plain .home-hero-title-main,
+.home-hero--plain .home-hero-date-day {
+  color: var(--hh-navy);
+  -webkit-text-fill-color: var(--hh-navy);
+  text-shadow: none;
+}
+
+.home-hero--plain .home-hero-title-script {
+  color: #44413C;
+  -webkit-text-fill-color: #44413C;
+  text-shadow: none;
+}
+
+.home-hero--plain .home-hero-eyebrow,
+.home-hero--plain .home-hero-meta-venue {
+  color: var(--hh-ink);
+  text-shadow: none;
+}
+
+.home-hero--plain .home-hero-date-weekday,
+.home-hero--plain .home-hero-date-side,
+.home-hero--plain .home-hero-meta-time {
+  color: var(--hh-blue);
+  text-shadow: none;
+}
+
+.home-hero--plain .home-hero-plain-corner-img {
+  max-width: min(34vw, 130px);
+}
+
+@media (min-width: 640px) {
+  .home-hero--plain .home-hero-plain-corner-img { max-width: 200px; }
+}
+
+@media (min-width: 1024px) {
+  .home-hero--plain .home-hero-plain-corner-img { max-width: 260px; }
+}
+
+.home-hero-content--cover {
+  padding-top: clamp(5.5rem, 20vw, 7rem);
+  gap: clamp(1.5rem, 5vw, 2.25rem);
+}
+
+.home-hero-cover {
+  position: relative;
+  margin: 0;
+  width: min(74vw, 320px);
+}
+
+/* Fine outer arch drawn a few pixels outside the frame */
+.home-hero-cover::before {
+  content: "";
+  position: absolute;
+  inset: -9px -9px auto;
+  aspect-ratio: 3 / 4;
+  width: calc(100% + 18px);
+  border-radius: 999px 999px 22px 22px;
+  border: 1px solid color-mix(in srgb, #B97865 55%, transparent);
+  pointer-events: none;
+}
+
+/* Soft arched frame: ivory mat, hairline dusty-rose border, gentle shadow */
+.home-hero-cover__frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 999px 999px 16px 16px;
+  background: #D9A08C;
+  border: 5px solid #FFF8F2;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #B97865 35%, transparent),
+    0 30px 55px -30px color-mix(in srgb, #44413C 40%, transparent),
+    0 10px 24px -14px color-mix(in srgb, #B97865 45%, transparent);
+}
+
+/* Soft blush vignette at the base so the photo melts into the frame */
+.home-hero-cover__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 72%, color-mix(in srgb, #FFF8F2 35%, transparent) 100%);
+}
+
+/* Natural colour, only the faintest warm lift — no heavy filter */
+.home-hero-cover__img {
+  object-fit: cover;
+  object-position: center 12%; /* room above their heads under the arch */
+  filter: saturate(0.96) brightness(1.02);
+}
+
+/* Small floral sprig resting on the frame's base */
+.home-hero-cover::after {
+  content: "";
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 58%;
+  aspect-ratio: 2170 / 725;
+  margin: -1.6rem auto 0;
+  background: url("/deco/new-deco/small-center.png") center / contain no-repeat;
+  filter: drop-shadow(0 4px 6px color-mix(in srgb, #44413C 15%, transparent));
+}
+
+@media (min-width: 768px) {
+  .home-hero-content--cover {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+    max-width: 64rem;
+    text-align: center;
+  }
+
+  .home-hero-content--cover .home-hero-cover {
+    flex: 0 0 auto;
+    width: clamp(280px, 34vw, 380px);
+  }
+
+  .home-hero-content--cover .home-hero-copy {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+/* Countdown keeps its original linear fade (burgundy at the bottom edge →
+   transparent), white numbers and blush labels — see the rules above */
+
+/* Longer title ("A Celebration of Love") wraps to two balanced lines in the card */
+.loading-screen--plain .ls-headline {
+  flex-wrap: wrap;
+  row-gap: 0.05em;
+  max-width: 100%;
+  padding-inline: 0.75rem;
+  font-size: clamp(1.55rem, 7vw, 2.5rem);
+}
+
+.loading-screen--plain .ls-headline__letter {
+  color: #44413C;
+  -webkit-text-fill-color: #44413C;
+}
+
+.ls-headline__break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+.loading-screen--plain .ls-headline {
+  font-size: clamp(1.45rem, 6.3vw, 2.5rem);
+}
+
+.loading-screen--plain .ls-headline {
+  column-gap: 0.42em;
+}
+
+/* Floral corners layered on top of the top corner vines */
+.loading-screen__plain-corner-overlay {
+  display: block;
+  width: min(44vw, 190px);
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .loading-screen__plain-corner-overlay { width: 240px; }
+}
+
+@media (min-width: 1024px) {
+  .loading-screen__plain-corner-overlay { width: 320px; }
+}
+
+
+/* ==========================================================================
+   Love story backdrop (plain) — the loading screen's palette: light paper
+   washing into beige (like the invitation card), soft blush-pink blooms,
+   charcoal type and warm-gray accents.
+   components/sections/love-story.tsx → .love-story-bg / .love-story-frame / .love-story-corner
+   components/StorySection.tsx → .story-open-wash
+   ========================================================================== */
+.love-story-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Translucent light white-warm-gray wash: the circle pattern (PlainBubbles)
+     behind the section shows through softly */
+  background:
+    radial-gradient(90% 16% at 50% 0%, rgb(255 248 242 / 65%) 0%, transparent 70%),
+    radial-gradient(60% 14% at 0% 30%, color-mix(in srgb, #D9A08C 30%, transparent) 0%, transparent 70%),
+    radial-gradient(60% 14% at 100% 62%, color-mix(in srgb, #D9A08C 26%, transparent) 0%, transparent 70%),
+    linear-gradient(
+      180deg,
+      rgb(255 248 242 / 58%) 0%,
+      color-mix(in srgb, #FFF8F2 52%, transparent) 50%,
+      rgb(255 248 242 / 50%) 100%
+    );
+}
+
+/* Fine slate paper grain so the beige reads as stationery rather than flat fill */
+.love-story-bg__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.18 0 0 0 0 0.31 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* Double border — same as the loading screen frame (replaces the old hairline) */
+.love-story-bg::after {
+  display: none;
+}
+
+.love-story-frame {
+  position: absolute;
+  z-index: 1;
+  inset: clamp(0.6rem, 2vw, 0.9rem);
+  pointer-events: none;
+  border: 1.5px solid color-mix(in srgb, var(--color-motif-medium) 70%, transparent);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #FFF8F2 45%, transparent),
+    0 0 0 1px color-mix(in srgb, #FFF8F2 30%, transparent);
+}
+
+.love-story-frame::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid color-mix(in srgb, var(--color-motif-medium) 40%, transparent);
+  border-radius: 3px;
+}
+
+/* Corner florals — same per-corner sizes as the loader / envelope / home hero */
+.love-story-corner {
+  height: auto;
+  max-width: none;
+  filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--color-welcome-navy) 18%, transparent));
+}
+
+.love-story-corner--tl,
+.love-story-corner--tr {
+  width: min(36vw, 300px);
+}
+
+.love-story-corner--bl,
+.love-story-corner--br {
+  width: min(44vw, 360px);
+}
+
+/* Opening line under the title */
+.love-story-intro {
+  font-family: "Crimson Text", "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(0.95rem, 1vw + 0.7rem, 1.1rem);
+  line-height: 1.7;
+  color: var(--color-welcome-text);
+  text-shadow: 0 0 8px rgb(255 248 242 / 75%);
+}
+
+/* blush-pink wash behind each chapter on the photo's side */
+.story-open-wash {
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  width: 78%;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 999px;
+  filter: blur(18px);
+  opacity: 0.9;
+}
+
+.story-open-wash--left {
+  left: -18%;
+  background: radial-gradient(closest-side, color-mix(in srgb, #44413C 30%, transparent) 0%, color-mix(in srgb, #D9A08C 50%, transparent) 55%, transparent 100%);
+}
+
+.story-open-wash--right {
+  right: -18%;
+  background: radial-gradient(closest-side, color-mix(in srgb, #44413C 30%, transparent) 0%, color-mix(in srgb, #D9A08C 50%, transparent) 55%, transparent 100%);
+}
+
+/* Text colors (loading screen palette): charcoal title, slate details, warm-gray rule */
+.story-open-date {
+  color: #44413C;
+}
+
+.story-open-title {
+  color: #44413C;
+  text-shadow: 0 1px 0 rgb(255 248 242 / 85%);
+}
+
+.story-open-rule {
+  background: #B97865;
+}
+
+.story-open-text {
+  color: #44413C;
+  text-shadow: 0 0 8px rgb(255 248 242 / 75%);
+}
+
+.story-open-number {
+  color: color-mix(in srgb, #D9A08C 30%, transparent);
+}
+
+/* Photo frame: light paper mat with a warm-gray edge */
+.story-open-photo {
+  background: #FFF8F2;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #B97865 35%, transparent),
+    0 18px 34px -16px color-mix(in srgb, #44413C 32%, transparent);
+}
+
+
+/* ==========================================================================
+   Home hero (plain) — four corner florals + double border, matching the
+   loading screen and envelope. Paths come from content/site.ts → homeHero.
+   ========================================================================== */
+.home-hero--plain .home-hero-plain-corners {
+  z-index: 3;
+}
+
+.home-hero-corner-slot {
+  pointer-events: none;
+}
+
+.home-hero-corner-slot--tl,
+.home-hero-corner-slot--tr {
+  width: min(36vw, 26vh, 300px);
+}
+
+.home-hero-corner-slot--bl,
+.home-hero-corner-slot--br {
+  width: min(44vw, 30vh, 360px);
+}
+
+.home-hero-corner-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--color-welcome-navy) 18%, transparent));
+}
+
+.home-hero-plain-frame {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  inset: max(0.75rem, env(safe-area-inset-top, 0px)) 0.75rem 0.75rem;
+  border: 1.5px solid color-mix(in srgb, var(--color-motif-medium) 70%, transparent);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, white 45%, transparent),
+    0 0 0 1px color-mix(in srgb, white 30%, transparent);
+}
+
+.home-hero-plain-frame::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid color-mix(in srgb, var(--color-motif-medium) 40%, transparent);
+  border-radius: 3px;
+}
+
+
+/* Sprig under the cover photo — a real <img> from content/site.ts → homeHero.coverVine
+   (replaces the old ::after sprig) */
+.home-hero-cover::after {
+  display: none;
+}
+
+.home-hero-cover__vine {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 66%;
+  height: auto;
+  margin: -1.9rem auto 0;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px color-mix(in srgb, #44413C 15%, transparent));
+}
+
+
+/* Love story: sprig above the title (content/site.ts → loveStory.headerOrnament) */
+.love-story-ornament {
+  width: min(46vw, 180px);
+}
+
+
+/* Love story: year / date line above each chapter title — Cinzel caps with
+   lining numerals so years and dates read as an engraved date stamp */
+.story-open-date {
+  font-family: var(--font-cinzel), "Cinzel", "Times New Roman", serif;
+  font-style: normal;
+  font-weight: 600;
+  font-variant-numeric: lining-nums;
+  font-size: clamp(0.7rem, 2.6vw, 0.86rem);
+  letter-spacing: 0.22em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: #9B6554;
+}
+
+
+/* ==========================================================================
+   Loader (plain) — photo display. Kept last so it wins.
+   The couple's photo strip shows clearly around the card: a light veil
+   (LOADER_PHOTO_VEIL in LoadingScreen.tsx) plus a vignette that stays soft
+   behind the card and lets the photos come through at the edges.
+   ========================================================================== */
+.loading-screen--plain .background-video__veil {
+  background: linear-gradient(180deg, #F1C8B8 0%, #FFF8F2 50%, #F1C8B8 100%);
+}
+
+.loading-screen--plain .loading-screen__plain-photo-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 62% at 50% 50%,
+    rgb(255 248 242 / 55%) 0%,
+    rgb(255 248 242 / 22%) 55%,
+    transparent 100%
+  );
+}
+
+/* Photos a touch warmer and fully saturated so they read as photographs, not texture */
+.loading-screen--plain .background-video .loading-screen__slide-photo {
+  filter: saturate(1.02) brightness(1.03);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, white 55%, transparent),
+    0 8px 22px -14px color-mix(in srgb, var(--ls-burgundy) 45%, transparent);
+}
+
+/* Slow "breathing" zoom on each tile while the strip slides */
+.loading-screen--plain:not(.is-reduced-motion) .background-video .loading-screen__slide-photo > img[data-loaded] {
+  animation: ls-photo-breathe 14s ease-in-out infinite alternate;
+}
+
+@keyframes ls-photo-breathe {
+  from { transform: scale(1); }
+  to { transform: scale(1.07); }
+}
+
+/* Frosted card: the photos glow faintly through it, text stays crisp */
+.loading-screen--plain .loading-screen__save-date {
+  background:
+    radial-gradient(85% 38% at 50% 0%, rgb(255 248 242 / 70%) 0%, transparent 72%) padding-box,
+    linear-gradient(
+      180deg,
+      rgb(255 248 242 / 86%) 0%,
+      rgb(255 248 242 / 82%) 55%,
+      color-mix(in srgb, var(--ls-blush) 45%, rgb(255 248 242 / 80%)) 100%
+    ) padding-box;
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  backdrop-filter: blur(10px) saturate(1.1);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .loading-screen--plain .loading-screen__save-date {
+    background: linear-gradient(180deg, var(--ls-ivory) 0%, var(--ls-ivory) 55%, color-mix(in srgb, var(--ls-blush) 55%, var(--ls-ivory)) 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen--plain .background-video .loading-screen__slide-photo > img {
+    animation: none;
+  }
+}
+
+
+/* ==========================================================================
+   Loader (photos) — matches the envelope (Hero.tsx): the same light photo
+   strip under the soft peach/ivory veil (PhotoBackground), navy type on top.
+   No panel behind the couple names. Kept last so it wins.
+   ========================================================================== */
+.loading-screen--invitation:not(.loading-screen--plain) {
+  --ls-navy: #44413C;
+  --ls-navy-soft: #44413C;
+  --ls-peach: #D9A08C;
+  --ls-peach-warm: #B97865;
+  --ls-peach-light: #F1C8B8;
+  --ls-ivory: #FFF8F2;
+  /* Type turns navy; the "shadow" token becomes a soft ivory halo so text lifts off the photos */
+  --ls-type-light: var(--ls-navy);
+  --ls-type-muted: var(--ls-navy-soft);
+  --ls-shadow: var(--ls-ivory);
+  background: linear-gradient(180deg, var(--ls-peach-light) 0%, var(--ls-ivory) 50%, var(--ls-peach-light) 100%);
+}
+
+/* Soft layer between photos and text: clear at the edges so the marquee reads,
+   a gentle peach-ivory glow down the middle column where the text sits */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__photo-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 62% 48% at 50% 46%, rgb(255 248 242 / 62%) 0%, rgb(255 248 242 / 28%) 55%, transparent 100%),
+    linear-gradient(180deg, rgb(241 200 184 / 55%) 0%, transparent 22%, transparent 78%, rgb(241 200 184 / 60%) 100%);
+}
+
+/* Headline + small caps in navy with an ivory halo */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-headline {
+  color: var(--ls-navy);
+  text-shadow:
+    0 0 1px rgb(255 248 242 / 90%),
+    0 2px 18px rgb(255 248 242 / 85%);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) :is(
+  .loading-screen__std-kicker,
+  .loading-screen__std-eyebrow,
+  .loading-screen__std-copy,
+  .loading-screen__std-status,
+  .loading-screen__std-venue-time,
+  .loading-screen__std-venue-name
+) {
+  text-shadow:
+    0 0 1px rgb(255 248 242 / 90%),
+    0 1px 12px rgb(255 248 242 / 90%);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-kicker,
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-venue-time {
+  color: var(--ls-navy-soft);
+}
+
+/* Couple names — straight on the background, no container.
+   (An older photo-mode rule painted a soft-ivory fill on the whole name block — cleared here.) */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-names-slot::before {
+  content: none;
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-names,
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-names--text {
+  background: none;
+  box-shadow: none;
+  filter: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* Solid navy names with an ivory halo so they read over the moving photos */
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__nick {
+  background: none;
+  color: var(--ls-navy);
+  -webkit-text-fill-color: var(--ls-navy);
+  font-size: clamp(2.8rem, 13vw, 5rem);
+  letter-spacing: 0.08em;
+  text-shadow:
+    0 0 2px rgb(255 248 242 / 95%),
+    0 0 14px rgb(255 248 242 / 90%),
+    0 0 30px rgb(255 248 242 / 75%);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__and {
+  text-shadow: 0 0 2px rgb(255 248 242 / 95%), 0 0 14px rgb(255 248 242 / 90%);
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  background: none;
+  color: var(--ls-peach-warm);
+  -webkit-text-fill-color: var(--ls-peach-warm);
+  font-size: clamp(1.6rem, 7vw, 2.6rem);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__and::before,
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__and::after {
+  content: "";
+  width: clamp(1.75rem, 9vw, 3.25rem);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ls-navy-soft));
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .ls-names__and::after {
+  background: linear-gradient(90deg, var(--ls-navy-soft), transparent);
+}
+
+/* Date cards: ivory frame, light bottom fade so the navy numbers read on the photos */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-box {
+  border: 1px solid rgb(255 248 242 / 85%);
+  box-shadow:
+    0 0 0 4px rgb(255 248 242 / 45%),
+    0 14px 30px -14px color-mix(in srgb, var(--ls-navy) 45%, transparent);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-box-overlay {
+  background: linear-gradient(180deg, transparent 0%, transparent 45%, rgb(255 248 242 / 88%) 100%);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-box-label {
+  color: var(--ls-navy-soft);
+}
+
+/* Progress + divider in navy / peach */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-rule {
+  background: linear-gradient(90deg, transparent, var(--ls-peach-warm), transparent);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-rule::after {
+  background: var(--ls-peach-warm);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-track {
+  background: rgb(255 248 242 / 80%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ls-navy) 15%, transparent);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-bar {
+  background: linear-gradient(90deg, var(--ls-peach), var(--ls-peach-warm) 55%, var(--ls-navy-soft));
+  box-shadow: none;
+}
+
+/* Corner florals + double frame in photo mode — same sizes and layering as plain mode
+   and the envelope, drawn above the photo strip and under the text */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-corners {
+  z-index: 2;
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-frame {
+  z-index: 2;
+  inset:
+    max(0.75rem, env(safe-area-inset-top, 0px))
+    max(0.75rem, env(safe-area-inset-right, 0px))
+    max(0.75rem, env(safe-area-inset-bottom, 0px))
+    max(0.75rem, env(safe-area-inset-left, 0px));
+  border: 1.5px solid color-mix(in srgb, var(--color-motif-medium) 70%, transparent);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, white 45%, transparent),
+    0 0 0 1px color-mix(in srgb, white 30%, transparent);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-frame::after {
+  inset: 5px;
+  border: 1px solid color-mix(in srgb, var(--color-motif-medium) 40%, transparent);
+  border-radius: 3px;
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-corner-img {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  filter: drop-shadow(0 4px 10px color-mix(in srgb, var(--color-welcome-navy) 18%, transparent));
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-corner-slot--tl,
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-corner-slot--tr {
+  width: min(36vw, 26vh, 300px);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-corner-slot--bl,
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-corner-slot--br {
+  width: min(44vw, 30vh, 360px);
+}
+
+/* Push the headline down a little so it clears the top corner florals */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-headline {
+  margin-top: clamp(2.25rem, 9vw, 3.75rem);
+}
+
+/* ==========================================================================
+   Photo strip behind the loader / envelope / home hero (PhotoBackground):
+   both strips are in the server HTML, CSS shows the right one, and tiles
+   appear as soon as their pixels arrive (no fade-in waiting on hydration).
+   ========================================================================== */
+.background-video__strip {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.background-video__strip--desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .background-video__strip--mobile {
+    display: none;
+  }
+
+  .background-video__strip--desktop {
+    display: block;
+  }
+}
+
+.background-video .loading-screen__slide-photo > img {
+  opacity: 1;
+  transition: none;
+}
+
+/* Warm placeholder while a tile is still downloading, so the strip never looks empty */
+.background-video .loading-screen__slide-photo {
+  background:
+    linear-gradient(135deg, #F1C8B8 0%, #D9A08C 55%, #F1C8B8 100%);
+}
+
+/* ==========================================================================
+   Loader — ceremony time + venue. Elegant serif, sentence/title case
+   (no all-caps): "3:30 PM" small and airy, venue name larger beneath it.
+   ========================================================================== */
+.loading-screen--invitation .loading-screen__std-venue {
+  gap: 0.15rem;
+  margin-bottom: 0.85rem;
+}
+
+.loading-screen--invitation .loading-screen__std-venue-time,
+.loading-screen--invitation .loading-screen__std-venue-name {
+  font-family: "Cormorant Garamond", "SortsMillGoudy", Georgia, serif;
+  text-transform: none;
+}
+
+.loading-screen--invitation .loading-screen__std-venue-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: clamp(0.95rem, 3.6vw, 1.1rem);
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: var(--color-welcome-heading, #44413C);
+}
+
+/* Small peach dots either side of the time */
+.loading-screen--invitation .loading-screen__std-venue-time::before,
+.loading-screen--invitation .loading-screen__std-venue-time::after {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #B97865;
+}
+
+.loading-screen--invitation .loading-screen__std-venue-name {
+  font-size: clamp(1.25rem, 5vw, 1.6rem);
+  font-weight: 600;
+  font-style: normal;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  color: var(--color-welcome-navy, #44413C);
+}
+
+/* ==========================================================================
+   Loader (photos) — date cards entrance.
+   Each card flips up from below like it's being dealt onto the table, lands
+   with a tiny overshoot into a fanned tilt, then the number + label rise in
+   and a single light sweep crosses the photo. CSS-only so it plays on first paint.
+   ========================================================================== */
+.ls-date-cards {
+  perspective: 900px;
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .ls-date-card {
+  opacity: 0;
+  transform-origin: 50% 100%;
+  animation: ls-date-card-in 1.6s cubic-bezier(0.2, 0.85, 0.25, 1) var(--ls-card-delay, 600ms) forwards;
+}
+
+/* The middle (Day) card sits a touch higher so the three read as a fan */
+.loading-screen--invitation:not(.loading-screen--plain) .ls-date-card:nth-child(2) {
+  --ls-card-lift: -6px;
+}
+
+@keyframes ls-date-card-in {
+  0% {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(56px) rotateX(-62deg) rotate(0deg) scale(0.86);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(calc(var(--ls-card-lift, 0px) - 10px)) rotateX(8deg) rotate(var(--ls-card-tilt, 0deg)) scale(1.03);
+  }
+  78% {
+    transform: translateY(calc(var(--ls-card-lift, 0px) + 2px)) rotateX(-2deg) rotate(var(--ls-card-tilt, 0deg)) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(var(--ls-card-lift, 0px)) rotateX(0deg) rotate(var(--ls-card-tilt, 0deg)) scale(1);
+  }
+}
+
+/* Number + label rise in once the card has landed */
+.loading-screen--invitation:not(.loading-screen--plain) .ls-date-card__meta {
+  z-index: 2;
+  opacity: 0;
+  animation: ls-date-meta-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--ls-card-delay, 600ms) + 950ms) forwards;
+}
+
+@keyframes ls-date-meta-in {
+  from { opacity: 0; transform: translateY(12px); letter-spacing: 0.18em; }
+  to { opacity: 1; transform: translateY(0); letter-spacing: normal; }
+}
+
+/* Single diagonal light sweep */
+.ls-date-card__shine {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgb(255 248 242 / 0%) 38%,
+    rgb(255 248 242 / 55%) 48%,
+    rgb(241 200 184 / 0%) 58%,
+    transparent 70%
+  );
+  transform: translateX(-130%);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .ls-date-card__shine {
+  animation: ls-date-shine 1.1s ease-in-out calc(var(--ls-card-delay, 600ms) + 1300ms) forwards;
+}
+
+@keyframes ls-date-shine {
+  to { transform: translateX(130%); }
+}
+
+.loading-screen.is-reduced-motion .ls-date-card,
+.loading-screen.is-reduced-motion .ls-date-card__meta {
+  animation: none;
+  opacity: 1;
+  transform: rotate(var(--ls-card-tilt, 0deg));
+}
+
+.loading-screen.is-reduced-motion .ls-date-card__shine {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen--invitation .ls-date-card,
+  .loading-screen--invitation .ls-date-card__meta {
+    animation: none;
+    opacity: 1;
+  }
+
+  .ls-date-card__shine {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Loader (photos) — peach progress bar: soft peach track, warm peach fill
+   with a moving sheen, and a glowing peach bead on the leading edge.
+   ========================================================================== */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-track {
+  position: relative;
+  height: 6px;
+  overflow: visible;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #F1C8B8, #F1C8B8);
+  box-shadow:
+    inset 0 1px 2px color-mix(in srgb, #B97865 35%, transparent),
+    0 0 0 1px rgb(255 248 242 / 85%),
+    0 2px 8px -2px color-mix(in srgb, #B97865 45%, transparent);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-bar {
+  position: relative;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #D9A08C 0%, #B97865 50%, #B97865 100%);
+  box-shadow: 0 0 10px color-mix(in srgb, #B97865 55%, transparent);
+}
+
+/* Sheen rides on its own layer so it doesn't share the bar's inline animation-duration */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 45%), transparent) no-repeat;
+  background-size: 30% 100%;
+  mix-blend-mode: soft-light;
+  animation: ls-plain-sheen 2s ease-in-out infinite;
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .ls-plain-progress-glow {
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 35% 35%, #FFF8F2 0%, #D9A08C 45%, #B97865 100%);
+  box-shadow:
+    0 0 0 2px rgb(255 248 242 / 90%),
+    0 0 14px 3px color-mix(in srgb, #B97865 60%, transparent);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-status {
+  color: #9B6554;
+}
+
+/* ==========================================================================
+   Loader (photos) — refinements: larger top-right + bottom-left florals,
+   a clean line progress bar (no bead), softer status text, footer raised.
+   ========================================================================== */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-corner-slot--tr {
+  width: min(42vw, 30vh, 350px);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__plain-corner-slot--bl {
+  width: min(52vw, 35vh, 420px);
+}
+
+/* Raise the details + progress so they sit clear of the bottom florals */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-footer {
+  padding-bottom: max(3.25rem, calc(2.25rem + env(safe-area-inset-bottom, 0px)));
+}
+
+/* Status line: soft italic serif in sentence case, with gently breathing dots */
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-status {
+  margin: 0.15rem 0 0.55rem;
+  font-family: "Cormorant Garamond", "SortsMillGoudy", Georgia, serif;
+  font-size: clamp(0.95rem, 3.6vw, 1.08rem);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: #44413C; /* slate navy, matches the rest of the loader text */
+  text-shadow:
+    0 0 2px rgb(255 248 242 / 95%),
+    0 0 12px rgb(255 248 242 / 90%);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-status::after {
+  content: "...";
+  display: inline-block;
+  width: 1.1em;
+  text-align: left;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: ls-status-dots 1.6s steps(4, end) infinite;
+}
+
+@keyframes ls-status-dots {
+  from { width: 0; }
+  to { width: 1.1em; }
+}
+
+/* Clean line progress: thin peach track, warm peach fill, soft glow — no bead */
+.loading-screen--invitation:not(.loading-screen--plain) .ls-plain-progress-glow {
+  display: none;
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-track {
+  height: 3px;
+  overflow: hidden;
+  background: color-mix(in srgb, #D9A08C 45%, #FFF8F2);
+  box-shadow: 0 0 0 1px rgb(255 248 242 / 70%);
+}
+
+.loading-screen--invitation:not(.loading-screen--plain) .loading-screen__std-bar {
+  background: linear-gradient(90deg, #D9A08C 0%, #B97865 60%, #B97865 100%);
+  box-shadow: 0 0 8px color-mix(in srgb, #B97865 60%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen--invitation .loading-screen__std-status::after {
+    animation: none;
+    width: 1.1em;
+  }
+}
+
+.loading-screen.is-reduced-motion .loading-screen__std-status::after {
+  animation: none;
+  width: 1.1em;
+}
+
+/* ==========================================================================
+   Home hero (plain) — time + venue and the countdown band. Kept last so it wins.
+   Time: airy italic serif in sentence case between two peach dots.
+   Venue: larger semibold serif in title case, navy.
+   Countdown band: soft peach fade (instead of the dark navy one) with navy
+   numbers, peach-brown labels and thin peach dividers.
+   ========================================================================== */
+.home-hero--plain .home-hero-meta {
+  gap: 0.2rem;
+  font-weight: 400;
+}
+
+.home-hero--plain .home-hero-meta-time,
+.home-hero--plain .home-hero-meta-venue {
+  font-family: "Cormorant Garamond", "SortsMillGoudy", Georgia, serif;
+  text-transform: none;
+  text-shadow:
+    0 0 2px rgb(255 248 242 / 95%),
+    0 0 14px rgb(255 248 242 / 85%);
+}
+
+.home-hero--plain .home-hero-meta-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65em;
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #44413C;
+}
+
+.home-hero--plain .home-hero-meta-time::before,
+.home-hero--plain .home-hero-meta-time::after {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #B97865;
+}
+
+.home-hero--plain .home-hero-meta-venue {
+  font-size: clamp(1.4rem, 6vw, 1.95rem);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+  color: #44413C;
+}
+
+/* Countdown band — light peach fade rising from the bottom edge */
+.home-hero--plain .home-hero-countdown-bar {
+  padding-top: clamp(1.5rem, 5vh, 2.75rem);
+  background: linear-gradient(
+    to top,
+    rgb(217 160 140 / 92%) 0%,
+    rgb(241 200 184 / 85%) 45%,
+    rgb(241 200 184 / 40%) 75%,
+    transparent 100%
+  );
+}
+
+/* Thin peach hairline above the heading */
+.home-hero--plain .home-hero-countdown-bar > div::before {
+  content: "";
+  display: block;
+  width: min(12rem, 50%);
+  height: 1px;
+  margin: 0 auto 0.7rem;
+  background: linear-gradient(90deg, transparent, #B97865, transparent);
+}
+
+.home-hero--plain .home-hero-countdown-heading {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(0.95rem, 3.8vw, 1.1rem);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: #44413C;
+  text-shadow: none;
+}
+
+.home-hero--plain .home-hero-countdown-value {
+  color: #44413C;
+  text-shadow: 0 1px 0 rgb(255 248 242 / 70%);
+}
+
+.home-hero--plain .home-hero-countdown-label {
+  color: #9B6554;
+  text-shadow: none;
+}
