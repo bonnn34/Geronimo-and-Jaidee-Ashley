@@ -348,14 +348,14 @@ guests: {
 
 // ── Website address (used for QR codes, link previews, table finder) ────────
 // NEXT_PUBLIC_SITE_URL (env) overrides this when set.
-const SITE_URL = "https://yvan-and-roan.weddinginvitationrsvp.com/"
+const SITE_URL = "https://geronimo-and-jaidee-ashley.vercel.app/"
 // Image shown when the link is shared (Facebook, Messenger, Viber, WhatsApp, X, …).
 // Keep it a 1200×630 JPG under ~300 KB — Messenger/WhatsApp silently drop larger images,
 // which is why forwarded links can lose their preview. Exported from /Details/imagepreview.png.
 // Use a NEW filename whenever the image changes — Facebook caches images by URL.
-const LINK_PREVIEW_IMAGE = "/Details/LinkPreview.png"
+const LINK_PREVIEW_IMAGE = "/Details/image-prev.png"
 // Square fallback (600×600) for apps that show a small square thumbnail
-const LINK_PREVIEW_IMAGE_SQUARE = "/Details/LinkPreview.png"
+const LINK_PREVIEW_IMAGE_SQUARE = "/Details/image-prev.png"
 
 // Site address with env override applied and no trailing slash — no need to edit
 export const canonicalSiteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? SITE_URL).replace(/\/$/, "")
@@ -474,7 +474,7 @@ export const siteConfig = {
     sponsorsInviteOne: SPONSORS_API, // same sheet as sponsors above
     sponsorsInviteTwo: "https://script.google.com/macros/s/AKfycbzCgydo8d4FMuc6tXeJ4eG0aLt9q2__BK0JRV1s6ZQHkNzVxuX3huQf9su9UeY-W_Lp/exec",
 ////google share 
-    googleShare: "https://docs.google.com/spreadsheets/d/1k_5NIVAXWd17GH08ZrWlYlh24NBVbWBTEpo1ltqtPog/edit?usp=sharing",
+    googleShare: "https://docs.google.com/spreadsheets/d/1NdOjBA7qkws1lIYJk3Rl4DNsksvP8C_swWu-0eb1eow/edit?usp=sharing",
     videoMessageForm:
       "https://docs.google.com/forms/d/e/1FAIpQLSfeGlEl4CMXWefdvCw6AOPHFS1ROku_rs-Gbofa2LkVJ0sLGQ/viewform", 
   },
